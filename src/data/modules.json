@@ -1,0 +1,461 @@
+{
+  "scale": {
+    "1": { "label": "Trivial", "description": "CRUD simple, 1-5 campos planos, sin relaciones. ~0.5-1 día." },
+    "2": { "label": "Estándar", "description": "Lista paginada + filtros + form con relaciones simples. ~1-2 días." },
+    "3": { "label": "Complejo", "description": "Form con sub-tablas, props dinámicas, múltiples tabs. ~3-5 días." },
+    "5": { "label": "Especializado", "description": "Visualizaciones (mapa, grafo, charts), estado complejo. ~1-2 semanas." },
+    "8": { "label": "Subsistema", "description": "Módulo grande con builder propio, varios sub-flujos. ~2-4 semanas." }
+  },
+  "modules": [
+    {
+      "id": "inv-locations",
+      "name": "Locations",
+      "category": "Inventory",
+      "items": [
+        { "id": "inv-loc-tree", "name": "Lista jerárquica (árbol) + panel detalle", "complexity": 3, "done": true, "owner": "", "notes": "" },
+        { "id": "inv-loc-crud", "name": "CRUD: crear / editar / eliminar location", "complexity": 3, "done": false, "owner": "", "notes": "" },
+        { "id": "inv-loc-tabs", "name": "Tabs adicionales: Docs, Floor Plans, Coverage Map, Site Survey", "complexity": 5, "done": false, "owner": "", "notes": "" }
+      ]
+    },
+    {
+      "id": "inv-equipment",
+      "name": "Equipment",
+      "category": "Inventory",
+      "items": [
+        { "id": "inv-eq-detail", "name": "Vista detalle + tabs (Properties, Ports, Positions, Services, Network, Docs)", "complexity": 5, "done": false, "owner": "", "notes": "Tabs scaffold creado, falta implementación real de cada tab" },
+        { "id": "inv-eq-crud", "name": "CRUD: crear / editar / eliminar + mover equipment", "complexity": 3, "done": false, "owner": "", "notes": "" },
+        { "id": "inv-eq-ports", "name": "Ports: conectar / desconectar + links + port edit dialog", "complexity": 3, "done": false, "owner": "", "notes": "" }
+      ]
+    },
+    {
+      "id": "inv-services",
+      "name": "Services (Inventory)",
+      "category": "Inventory",
+      "items": [
+        { "id": "inv-svc-list", "name": "Lista + Power Search + filtros", "complexity": 2, "done": false, "owner": "", "notes": "Componente Services.tsx básico existe" },
+        { "id": "inv-svc-crud", "name": "CRUD: crear / editar / ver / eliminar + endpoints + links & ports", "complexity": 3, "done": false, "owner": "", "notes": "" }
+      ]
+    },
+    {
+      "id": "inv-cat-eqtypes",
+      "name": "Catálogo — Equipment Types",
+      "category": "Inventory",
+      "items": [
+        { "id": "inv-cat-eqt-list", "name": "Lista + filtros + paginación", "complexity": 2, "done": true, "owner": "", "notes": "" },
+        { "id": "inv-cat-eqt-crud", "name": "CRUD Form: Properties / Ports / Positions / Attributes", "complexity": 3, "done": true, "owner": "", "notes": "" }
+      ]
+    },
+    {
+      "id": "inv-cat-loctypes",
+      "name": "Catálogo — Location Types",
+      "category": "Inventory",
+      "items": [
+        { "id": "inv-cat-loct-crud", "name": "Lista + CRUD Form", "complexity": 2, "done": false, "owner": "", "notes": "Lista existe, falta FormPage completo" }
+      ]
+    },
+    {
+      "id": "inv-cat-porttypes",
+      "name": "Catálogo — Port Types",
+      "category": "Inventory",
+      "items": [
+        { "id": "inv-cat-port-crud", "name": "Lista + CRUD Form", "complexity": 2, "done": false, "owner": "", "notes": "Lista existe, falta FormPage" }
+      ]
+    },
+    {
+      "id": "inv-cat-svctypes",
+      "name": "Catálogo — Service Types",
+      "category": "Inventory",
+      "items": [
+        { "id": "inv-cat-svct-crud", "name": "Lista + CRUD Form + endpoint definitions", "complexity": 3, "done": false, "owner": "", "notes": "Lista existe, falta FormPage" }
+      ]
+    },
+    {
+      "id": "inv-cat-credentials",
+      "name": "Catálogo — Credentials",
+      "category": "Inventory",
+      "items": [
+        { "id": "inv-cat-cred-crud", "name": "Lista + CRUD Form + transfer list", "complexity": 2, "done": false, "owner": "", "notes": "Lista existe, falta FormPage" }
+      ]
+    },
+    {
+      "id": "inv-cat-cmdprops",
+      "name": "Catálogo — Command Properties",
+      "category": "Inventory",
+      "items": [
+        { "id": "inv-cat-cmd-crud", "name": "Lista + CRUD Form", "complexity": 1, "done": false, "owner": "", "notes": "Lista existe, falta FormPage" }
+      ]
+    },
+    {
+      "id": "inv-discovery",
+      "name": "Discovery",
+      "category": "Inventory",
+      "items": [
+        { "id": "inv-disc-rules", "name": "Rules: Lista + CRUD Form + Scheduled + Subnets + IPs asociadas", "complexity": 3, "done": false, "owner": "", "notes": "Lista existe, falta FormPage completo" },
+        { "id": "inv-disc-cmdrules", "name": "Command Rules: Lista + CRUD Form", "complexity": 2, "done": false, "owner": "", "notes": "Lista existe, falta FormPage" },
+        { "id": "inv-disc-exec", "name": "Executions: Lista + filtros", "complexity": 2, "done": false, "owner": "", "notes": "Componente existe, falta conexión real" },
+        { "id": "inv-disc-mapping", "name": "Mapping + IPs + NMS: Lista + CRUD Form por cada uno", "complexity": 2, "done": false, "owner": "", "notes": "Listas existen, faltan FormPages" }
+      ]
+    },
+    {
+      "id": "inv-polling",
+      "name": "Polling",
+      "category": "Inventory",
+      "items": [
+        { "id": "inv-poll-rules", "name": "Rules: Lista + CRUD Form + OIDs + categorías + bulk upload", "complexity": 3, "done": false, "owner": "", "notes": "Lista existe, falta FormPage completo" },
+        { "id": "inv-poll-exec", "name": "Executions + Equipment sin reglas asignadas", "complexity": 2, "done": false, "owner": "", "notes": "Componentes existen, falta conexión real" }
+      ]
+    },
+    {
+      "id": "inv-mibs",
+      "name": "MIBs — Custom OIDs",
+      "category": "Inventory",
+      "items": [
+        { "id": "inv-mibs-oids", "name": "Lista + CRUD Form + validación de nombre", "complexity": 1, "done": false, "owner": "", "notes": "Lista existe, falta FormPage" }
+      ]
+    },
+    {
+      "id": "inv-map",
+      "name": "Map",
+      "category": "Inventory",
+      "items": [
+        { "id": "inv-map-views", "name": "Locations Map + Coverage Map + capas + popouts", "complexity": 5, "done": false, "owner": "", "notes": "Scaffold existe, falta implementación real" }
+      ]
+    },
+    {
+      "id": "inv-topology",
+      "name": "Topology View",
+      "category": "Inventory",
+      "items": [
+        { "id": "inv-topo-view", "name": "Vista fuerza-directa + panel KPIs + filtros + dialogs", "complexity": 5, "done": false, "owner": "", "notes": "Componente TopologyView.tsx existe, falta implementación real" }
+      ]
+    },
+    {
+      "id": "inv-netgroup",
+      "name": "Network Grouping",
+      "category": "Inventory",
+      "items": [
+        { "id": "inv-ng-full", "name": "Categorías CRUD + grupos estáticos + dinámicos + NEs table + bulk upload", "complexity": 8, "done": false, "owner": "", "notes": "No existe en app_new" }
+      ]
+    },
+    {
+      "id": "inv-reconciliation",
+      "name": "Network Reconciliation",
+      "category": "Inventory",
+      "items": [
+        { "id": "inv-rec-full", "name": "Rules CRUD + executions + cambios automáticos + stepper", "complexity": 8, "done": false, "owner": "", "notes": "No existe en app_new" }
+      ]
+    },
+    {
+      "id": "inv-actions",
+      "name": "Action Catalog & Execution",
+      "category": "Inventory",
+      "items": [
+        { "id": "inv-act-full", "name": "Configuración de acciones + stepper ejecución + acciones programadas", "complexity": 5, "done": false, "owner": "", "notes": "No existe en app_new" }
+      ]
+    },
+    {
+      "id": "wf-workorders",
+      "name": "Work Orders",
+      "category": "Workforce",
+      "items": [
+        { "id": "wf-wo-list", "name": "Lista + búsqueda + filtros (Power Search)", "complexity": 3, "done": true, "owner": "", "notes": "" },
+        { "id": "wf-wo-crud", "name": "CRUD Form: crear / editar / ver + checklist + categorías", "complexity": 3, "done": true, "owner": "", "notes": "" },
+        { "id": "wf-wo-extras", "name": "Materials tab, Export, Map view, Comentarios/Actividades", "complexity": 3, "done": false, "owner": "", "notes": "Materials tab parcial, resto falta" }
+      ]
+    },
+    {
+      "id": "wf-projects",
+      "name": "Projects",
+      "category": "Workforce",
+      "items": [
+        { "id": "wf-proj-list", "name": "Lista + búsqueda + filtros", "complexity": 2, "done": true, "owner": "", "notes": "" },
+        { "id": "wf-proj-crud", "name": "CRUD Form: crear / editar / ver + lista de Work Orders", "complexity": 3, "done": true, "owner": "", "notes": "" }
+      ]
+    },
+    {
+      "id": "wf-cfg-wotypes",
+      "name": "Configuración — Work Order Types",
+      "category": "Workforce",
+      "items": [
+        { "id": "wf-cfg-wot-crud", "name": "Lista + CRUD Form", "complexity": 2, "done": false, "owner": "", "notes": "Lista existe, falta FormPage" }
+      ]
+    },
+    {
+      "id": "wf-cfg-projtypes",
+      "name": "Configuración — Project Types",
+      "category": "Workforce",
+      "items": [
+        { "id": "wf-cfg-pt-crud", "name": "Lista + CRUD Form", "complexity": 2, "done": false, "owner": "", "notes": "Lista existe, falta FormPage" }
+      ]
+    },
+    {
+      "id": "wf-cfg-contracts",
+      "name": "Configuración — Contract Types",
+      "category": "Workforce",
+      "items": [
+        { "id": "wf-cfg-ct-crud", "name": "Lista + CRUD Form", "complexity": 1, "done": false, "owner": "", "notes": "Lista existe, falta FormPage" }
+      ]
+    },
+    {
+      "id": "wf-cfg-materials",
+      "name": "Configuración — Materials",
+      "category": "Workforce",
+      "items": [
+        { "id": "wf-cfg-mat-crud", "name": "Lista + CRUD Form", "complexity": 2, "done": false, "owner": "", "notes": "Lista existe, falta FormPage" }
+      ]
+    },
+    {
+      "id": "wf-cfg-matkits",
+      "name": "Configuración — Material Kits",
+      "category": "Workforce",
+      "items": [
+        { "id": "wf-cfg-mk-crud", "name": "Lista + CRUD Form (con composición de items)", "complexity": 2, "done": false, "owner": "", "notes": "Lista existe, falta FormPage" }
+      ]
+    },
+    {
+      "id": "as-counters",
+      "name": "Counters",
+      "category": "Assurance",
+      "items": [
+        { "id": "as-cnt-list", "name": "Lista + filtros + bulk upload CSV", "complexity": 2, "done": true, "owner": "", "notes": "" },
+        { "id": "as-cnt-crud", "name": "CRUD Form: crear / editar / ver", "complexity": 3, "done": true, "owner": "", "notes": "" }
+      ]
+    },
+    {
+      "id": "as-kpis",
+      "name": "KPIs",
+      "category": "Assurance",
+      "items": [
+        { "id": "as-kpi-list", "name": "Lista + filtros + bulk upload", "complexity": 2, "done": false, "owner": "", "notes": "Lista básica existe, falta filtros y bulk" },
+        { "id": "as-kpi-crud", "name": "CRUD Form + fórmulas + aggregations + domain", "complexity": 3, "done": false, "owner": "", "notes": "Falta FormPage" }
+      ]
+    },
+    {
+      "id": "as-thresholds",
+      "name": "Thresholds",
+      "category": "Assurance",
+      "items": [
+        { "id": "as-thr-list", "name": "Lista + filtros", "complexity": 2, "done": false, "owner": "", "notes": "Lista básica existe" },
+        { "id": "as-thr-crud", "name": "CRUD Form + algoritmos + alarms + NEs + períodos efectivos", "complexity": 5, "done": false, "owner": "", "notes": "Falta FormPage — muy complejo" }
+      ]
+    },
+    {
+      "id": "as-busyhour",
+      "name": "Busy Hour",
+      "category": "Assurance",
+      "items": [
+        { "id": "as-bh-crud", "name": "Lista + CRUD Form + time accordion + períodos", "complexity": 3, "done": false, "owner": "", "notes": "Lista básica existe, falta FormPage" }
+      ]
+    },
+    {
+      "id": "as-params",
+      "name": "Parameters",
+      "category": "Assurance",
+      "items": [
+        { "id": "as-par-crud", "name": "Lista + CRUD Form + entidad asociada", "complexity": 3, "done": false, "owner": "", "notes": "Lista básica existe, falta FormPage" }
+      ]
+    },
+    {
+      "id": "as-portal",
+      "name": "Tools + Fault Operations",
+      "category": "Assurance",
+      "items": [
+        { "id": "as-tools", "name": "Tools: lista de herramientas disponibles", "complexity": 2, "done": false, "owner": "", "notes": "Componente básico existe" },
+        { "id": "as-faults", "name": "Fault Operations: lista + filtros + detalle + historial", "complexity": 3, "done": false, "owner": "", "notes": "Componente básico existe, falta detalle y filtros" }
+      ]
+    },
+    {
+      "id": "as-kpiview",
+      "name": "KPI Visualization",
+      "category": "Assurance",
+      "items": [
+        { "id": "as-kpiv-full", "name": "KPI View dashboard + KPI Stack + Drilldown + filtros + NEs preview + charts", "complexity": 8, "done": false, "owner": "", "notes": "No existe en app_new — subsistema completo" }
+      ]
+    },
+    {
+      "id": "as-superset",
+      "name": "Superset Dashboard",
+      "category": "Assurance",
+      "items": [
+        { "id": "as-super-full", "name": "Embed iframe + sidebar tree + CRUD dashboards", "complexity": 5, "done": false, "owner": "", "notes": "No existe en app_new" }
+      ]
+    },
+    {
+      "id": "as-managed",
+      "name": "Managed Objects + KQI",
+      "category": "Assurance",
+      "items": [
+        { "id": "as-mo-full", "name": "Managed Objects CRUD + categorías + KQI Targets + Sources + Indicators", "complexity": 5, "done": false, "owner": "", "notes": "No existe en app_new" }
+      ]
+    },
+    {
+      "id": "as-alarms",
+      "name": "Alarm Filtering",
+      "category": "Assurance",
+      "items": [
+        { "id": "as-alm-full", "name": "Lista + Form + Status + Tipos de filtrado", "complexity": 3, "done": false, "owner": "", "notes": "No existe en app_new" }
+      ]
+    },
+    {
+      "id": "as-ngnavigator",
+      "name": "Network Group Navigator",
+      "category": "Assurance",
+      "items": [
+        { "id": "as-ngn-full", "name": "Tree view + stack chart + equipment panel + KPI list", "complexity": 5, "done": false, "owner": "", "notes": "No existe en app_new" }
+      ]
+    },
+    {
+      "id": "rep-management",
+      "name": "Reports Management",
+      "category": "Reports",
+      "items": [
+        { "id": "rep-mgmt-full", "name": "Lista + árbol de categorías + filtros + eliminación", "complexity": 3, "done": false, "owner": "", "notes": "Parcialmente en Reports.tsx, falta árbol y gestión" }
+      ]
+    },
+    {
+      "id": "rep-configuration",
+      "name": "Report Configuration (Builder)",
+      "category": "Reports",
+      "items": [
+        { "id": "rep-cfg-full", "name": "Form + Sheets + Attributes + Fórmulas + KPI/Counter selection + File order + Time config", "complexity": 8, "done": false, "owner": "", "notes": "No existe en app_new — el bloque más grande del módulo Reports" }
+      ]
+    },
+    {
+      "id": "rep-scheduling",
+      "name": "Report Scheduling",
+      "category": "Reports",
+      "items": [
+        { "id": "rep-sched-list", "name": "Lista + filtros", "complexity": 2, "done": true, "owner": "", "notes": "" },
+        { "id": "rep-sched-crud", "name": "CRUD Form: crear / editar / ver + notificaciones", "complexity": 3, "done": true, "owner": "", "notes": "" }
+      ]
+    },
+    {
+      "id": "rep-executions",
+      "name": "Report Executions",
+      "category": "Reports",
+      "items": [
+        { "id": "rep-exec-list", "name": "Lista paginada + filtros + descarga", "complexity": 2, "done": true, "owner": "", "notes": "" }
+      ]
+    },
+    {
+      "id": "adm-users",
+      "name": "Usuarios",
+      "category": "Admin",
+      "items": [
+        { "id": "adm-usr-list", "name": "Lista + filtros", "complexity": 2, "done": false, "owner": "", "notes": "Lista básica existe, falta filtros" },
+        { "id": "adm-usr-crud", "name": "CRUD Form + roles + profile + status + grupos asignados", "complexity": 3, "done": false, "owner": "", "notes": "Falta FormPage" }
+      ]
+    },
+    {
+      "id": "adm-groups",
+      "name": "Permission Groups",
+      "category": "Admin",
+      "items": [
+        { "id": "adm-grp-list", "name": "Lista + filtros", "complexity": 2, "done": false, "owner": "", "notes": "Lista básica existe" },
+        { "id": "adm-grp-crud", "name": "CRUD Form + members + policies asignadas", "complexity": 3, "done": false, "owner": "", "notes": "Falta FormPage" }
+      ]
+    },
+    {
+      "id": "adm-policies",
+      "name": "Permission Policies",
+      "category": "Admin",
+      "items": [
+        { "id": "adm-pol-list", "name": "Lista + filtros", "complexity": 2, "done": false, "owner": "", "notes": "Lista básica existe" },
+        { "id": "adm-pol-crud", "name": "CRUD Form + secciones de reglas (Inventory, Workforce, Reports, Assurance)", "complexity": 5, "done": false, "owner": "", "notes": "Falta FormPage — muy complejo por todas las secciones de reglas" }
+      ]
+    },
+    {
+      "id": "adm-orgs",
+      "name": "Organizations",
+      "category": "Admin",
+      "items": [
+        { "id": "adm-org-full", "name": "Lista + CRUD Form + members + templates", "complexity": 3, "done": false, "owner": "", "notes": "No existe en app_new (módulo Master en legacy)" }
+      ]
+    },
+    {
+      "id": "adm-holidays",
+      "name": "Holiday Management",
+      "category": "Admin",
+      "items": [
+        { "id": "adm-hol-full", "name": "Lista + CRUD Form + bulk upload CSV", "complexity": 2, "done": false, "owner": "", "notes": "No existe en app_new" }
+      ]
+    },
+    {
+      "id": "adm-auditlog",
+      "name": "Audit Log",
+      "category": "Admin",
+      "items": [
+        { "id": "adm-audit-full", "name": "Lista paginada + filtros + exportar", "complexity": 3, "done": false, "owner": "", "notes": "No existe en app_new" }
+      ]
+    },
+    {
+      "id": "adm-notifgroups",
+      "name": "Notification Groups",
+      "category": "Admin",
+      "items": [
+        { "id": "adm-ng-list", "name": "Lista + filtros", "complexity": 2, "done": false, "owner": "", "notes": "Lista básica existe" },
+        { "id": "adm-ng-crud", "name": "CRUD Form + contactos + server config SMTP", "complexity": 3, "done": false, "owner": "", "notes": "Falta FormPage" }
+      ]
+    },
+    {
+      "id": "auto-flows",
+      "name": "Flows",
+      "category": "Automation",
+      "items": [
+        { "id": "auto-fl-list", "name": "Lista + filtros + eliminación", "complexity": 2, "done": false, "owner": "", "notes": "Lista básica existe" },
+        { "id": "auto-fl-builder", "name": "Flow Builder: canvas drag & drop + nodos + conexiones", "complexity": 8, "done": false, "owner": "", "notes": "No existe en app_new — el builder gráfico es el core de este módulo" }
+      ]
+    },
+    {
+      "id": "auto-operation",
+      "name": "Operation (Flow Instances)",
+      "category": "Automation",
+      "items": [
+        { "id": "auto-op-list", "name": "Lista de instancias + filtros + búsqueda", "complexity": 3, "done": false, "owner": "", "notes": "Lista básica existe" },
+        { "id": "auto-op-detail", "name": "Detalle de instancia + acciones (cancel/retry) + timeline", "complexity": 5, "done": false, "owner": "", "notes": "Falta detalle completo" }
+      ]
+    },
+    {
+      "id": "ful-services",
+      "name": "Services (Fulfillment)",
+      "category": "Fulfillment",
+      "items": [
+        { "id": "ful-svc-list", "name": "Lista + filtros", "complexity": 3, "done": false, "owner": "", "notes": "Existe en mocks, no conectado a API real" },
+        { "id": "ful-svc-crud", "name": "CRUD Form + endpoints + links de red", "complexity": 5, "done": false, "owner": "", "notes": "No implementado" }
+      ]
+    },
+    {
+      "id": "ful-serviceorders",
+      "name": "Service Orders",
+      "category": "Fulfillment",
+      "items": [
+        { "id": "ful-so-list", "name": "Lista + filtros", "complexity": 3, "done": false, "owner": "", "notes": "Existe en mocks, no conectado a API real" },
+        { "id": "ful-so-crud", "name": "CRUD Form + líneas de servicio", "complexity": 5, "done": false, "owner": "", "notes": "No implementado" }
+      ]
+    },
+    {
+      "id": "cx-comments",
+      "name": "Comments & Activities",
+      "category": "Cross-cutting",
+      "items": [
+        { "id": "cx-com-full", "name": "Componente genérico + integraciones en WO, Equipment, Location", "complexity": 3, "done": false, "owner": "", "notes": "No existe en app_new" }
+      ]
+    },
+    {
+      "id": "cx-powersearch",
+      "name": "Power Search & Bookmarks",
+      "category": "Cross-cutting",
+      "items": [
+        { "id": "cx-ps-full", "name": "Power Search genérico reutilizable + Filter Bookmarks CRUD", "complexity": 5, "done": false, "owner": "", "notes": "Existe de forma acoplada por módulo, falta componente genérico y bookmarks" }
+      ]
+    },
+    {
+      "id": "cx-home",
+      "name": "Home Dashboard",
+      "category": "Cross-cutting",
+      "items": [
+        { "id": "cx-home-full", "name": "Dashboard: cards, chart renderer, chatbot panel, footer", "complexity": 3, "done": true, "owner": "", "notes": "" }
+      ]
+    }
+  ]
+}
