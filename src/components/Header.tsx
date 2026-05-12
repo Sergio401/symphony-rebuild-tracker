@@ -19,9 +19,10 @@ interface Props {
   modules: Module[];
   overrides: Record<string, OverrideItem>;
   saveStatus: SaveStatus;
+  onBakeState?: () => Promise<void>;
 }
 
-export function Header({ modules, overrides, saveStatus }: Props) {
+export function Header({ modules, overrides, saveStatus, onBakeState }: Props) {
   const progress = computeProgress(modules, overrides);
 
   const totalItems = modules.reduce((s, m) => s + m.items.length, 0);
@@ -57,9 +58,22 @@ export function Header({ modules, overrides, saveStatus }: Props) {
           </div>
         </div>
 
-        {/* Save status */}
-        <div className={`text-xs shrink-0 transition-colors ${SAVE_STATUS_COLOR[saveStatus]}`}>
-          {SAVE_STATUS_TEXT[saveStatus]}
+        <div className="flex items-center gap-3 shrink-0">
+          {import.meta.env.DEV && onBakeState && (
+            <button
+              onClick={async () => {
+                if (confirm('Esto aplicará todos los cambios locales al modules.json y limpiará el estado guardado. ¿Continuar?')) {
+                  await onBakeState();
+                }
+              }}
+              className="text-xs px-3 py-1.5 rounded-lg bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 transition-colors font-medium"
+            >
+              Guardar estado al JSON
+            </button>
+          )}
+          <div className={`text-xs transition-colors ${SAVE_STATUS_COLOR[saveStatus]}`}>
+            {SAVE_STATUS_TEXT[saveStatus]}
+          </div>
         </div>
       </div>
     </header>

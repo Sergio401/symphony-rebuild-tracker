@@ -1,10 +1,25 @@
 {
   "scale": {
-    "1": { "label": "Trivial", "description": "CRUD simple, 1-5 campos planos, sin relaciones. ~0.5-1 día." },
-    "2": { "label": "Estándar", "description": "Lista paginada + filtros + form con relaciones simples. ~1-2 días." },
-    "3": { "label": "Complejo", "description": "Form con sub-tablas, props dinámicas, múltiples tabs. ~3-5 días." },
-    "5": { "label": "Especializado", "description": "Visualizaciones (mapa, grafo, charts), estado complejo. ~1-2 semanas." },
-    "8": { "label": "Subsistema", "description": "Módulo grande con builder propio, varios sub-flujos. ~2-4 semanas." }
+    "1": {
+      "label": "Trivial",
+      "description": "CRUD simple, 1-5 campos planos, sin relaciones. ~0.5-1 día."
+    },
+    "2": {
+      "label": "Estándar",
+      "description": "Lista paginada + filtros + form con relaciones simples. ~1-2 días."
+    },
+    "3": {
+      "label": "Complejo",
+      "description": "Form con sub-tablas, props dinámicas, múltiples tabs. ~3-5 días."
+    },
+    "5": {
+      "label": "Especializado",
+      "description": "Visualizaciones (mapa, grafo, charts), estado complejo. ~1-2 semanas."
+    },
+    "8": {
+      "label": "Subsistema",
+      "description": "Módulo grande con builder propio, varios sub-flujos. ~2-4 semanas."
+    }
   },
   "modules": [
     {
@@ -12,9 +27,30 @@
       "name": "Locations",
       "category": "Inventory",
       "items": [
-        { "id": "inv-loc-tree", "name": "Lista jerárquica (árbol) + panel detalle", "complexity": 3, "done": true, "owner": "", "notes": "" },
-        { "id": "inv-loc-crud", "name": "CRUD: crear / editar / eliminar location", "complexity": 3, "done": false, "owner": "", "notes": "" },
-        { "id": "inv-loc-tabs", "name": "Tabs adicionales: Docs, Floor Plans, Coverage Map, Site Survey", "complexity": 5, "done": false, "owner": "", "notes": "" }
+        {
+          "id": "inv-loc-tree",
+          "name": "Lista jerárquica (árbol) + panel detalle",
+          "complexity": 3,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "inv-loc-crud",
+          "name": "CRUD: crear / editar / eliminar location",
+          "complexity": 3,
+          "done": false,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "inv-loc-tabs",
+          "name": "Tabs adicionales: Docs, Floor Plans, Coverage Map, Site Survey",
+          "complexity": 5,
+          "done": false,
+          "owner": "",
+          "notes": ""
+        }
       ]
     },
     {
@@ -22,9 +58,30 @@
       "name": "Equipment",
       "category": "Inventory",
       "items": [
-        { "id": "inv-eq-detail", "name": "Vista detalle + tabs (Properties, Ports, Positions, Services, Network, Docs)", "complexity": 5, "done": false, "owner": "", "notes": "Tabs scaffold creado, falta implementación real de cada tab" },
-        { "id": "inv-eq-crud", "name": "CRUD: crear / editar / eliminar + mover equipment", "complexity": 3, "done": false, "owner": "", "notes": "" },
-        { "id": "inv-eq-ports", "name": "Ports: conectar / desconectar + links + port edit dialog", "complexity": 3, "done": false, "owner": "", "notes": "" }
+        {
+          "id": "inv-eq-detail",
+          "name": "Vista detalle + tabs (Properties, Ports, Positions, Services, Network, Docs)",
+          "complexity": 5,
+          "done": false,
+          "owner": "",
+          "notes": "Tabs scaffold creado, falta implementación real de cada tab"
+        },
+        {
+          "id": "inv-eq-crud",
+          "name": "CRUD: crear / editar / eliminar + mover equipment",
+          "complexity": 3,
+          "done": false,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "inv-eq-ports",
+          "name": "Ports: conectar / desconectar + links + port edit dialog",
+          "complexity": 3,
+          "done": false,
+          "owner": "",
+          "notes": ""
+        }
       ]
     },
     {
@@ -32,8 +89,22 @@
       "name": "Services (Inventory)",
       "category": "Inventory",
       "items": [
-        { "id": "inv-svc-list", "name": "Lista + Power Search + filtros", "complexity": 2, "done": false, "owner": "", "notes": "Componente Services.tsx básico existe" },
-        { "id": "inv-svc-crud", "name": "CRUD: crear / editar / ver / eliminar + endpoints + links & ports", "complexity": 3, "done": false, "owner": "", "notes": "" }
+        {
+          "id": "inv-svc-list",
+          "name": "Catálogo",
+          "complexity": 2,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "inv-svc-crud",
+          "name": "Página de creación de Servicios (Canva / Topología)",
+          "complexity": 8,
+          "done": false,
+          "owner": "",
+          "notes": ""
+        }
       ]
     },
     {
@@ -41,8 +112,22 @@
       "name": "Catálogo — Equipment Types",
       "category": "Inventory",
       "items": [
-        { "id": "inv-cat-eqt-list", "name": "Lista + filtros + paginación", "complexity": 2, "done": true, "owner": "", "notes": "" },
-        { "id": "inv-cat-eqt-crud", "name": "CRUD Form: Properties / Ports / Positions / Attributes", "complexity": 3, "done": true, "owner": "", "notes": "" }
+        {
+          "id": "inv-cat-eqt-list",
+          "name": "Lista + filtros + paginación",
+          "complexity": 2,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "inv-cat-eqt-crud",
+          "name": "CRUD Form: Properties / Ports / Positions / Attributes",
+          "complexity": 5,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        }
       ]
     },
     {
@@ -50,7 +135,22 @@
       "name": "Catálogo — Location Types",
       "category": "Inventory",
       "items": [
-        { "id": "inv-cat-loct-crud", "name": "Lista + CRUD Form", "complexity": 2, "done": false, "owner": "", "notes": "Lista existe, falta FormPage completo" }
+        {
+          "id": "inv-cat-loct-list",
+          "name": "Catálogo",
+          "complexity": 1,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "inv-cat-loct-form",
+          "name": "Formulario crear / editar",
+          "complexity": 2,
+          "done": false,
+          "owner": "",
+          "notes": "Falta FormPage completo"
+        }
       ]
     },
     {
@@ -58,7 +158,23 @@
       "name": "Catálogo — Port Types",
       "category": "Inventory",
       "items": [
-        { "id": "inv-cat-port-crud", "name": "Lista + CRUD Form", "complexity": 2, "done": false, "owner": "", "notes": "Lista existe, falta FormPage" }
+        {
+          "id": "inv-cat-port-list",
+          "name": "Catálogo",
+          "complexity": 1,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "inv-cat-port-form",
+          "name": "Formulario crear / editar",
+          "complexity": 2,
+          "done": false,
+          "owner": "India",
+          "notes": "https://github.com/everisopennetworks/symphony/pull/7154 - COSD-2523",
+          "status": "in-progress"
+        }
       ]
     },
     {
@@ -66,7 +182,22 @@
       "name": "Catálogo — Service Types",
       "category": "Inventory",
       "items": [
-        { "id": "inv-cat-svct-crud", "name": "Lista + CRUD Form + endpoint definitions", "complexity": 3, "done": false, "owner": "", "notes": "Lista existe, falta FormPage" }
+        {
+          "id": "inv-cat-svct-list",
+          "name": "Catálogo",
+          "complexity": 1,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "inv-cat-svct-form",
+          "name": "Formulario crear / editar + endpoint definitions",
+          "complexity": 3,
+          "done": false,
+          "owner": "",
+          "notes": "Falta FormPage"
+        }
       ]
     },
     {
@@ -74,7 +205,23 @@
       "name": "Catálogo — Credentials",
       "category": "Inventory",
       "items": [
-        { "id": "inv-cat-cred-crud", "name": "Lista + CRUD Form + transfer list", "complexity": 2, "done": false, "owner": "", "notes": "Lista existe, falta FormPage" }
+        {
+          "id": "inv-cat-cred-list",
+          "name": "Catálogo",
+          "complexity": 1,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "inv-cat-cred-form",
+          "name": "Formulario crear / editar + transfer list",
+          "complexity": 2,
+          "done": false,
+          "owner": "India",
+          "notes": "https://github.com/everisopennetworks/symphony/pull/7118 - COSD-2524",
+          "status": "in-progress"
+        }
       ]
     },
     {
@@ -82,27 +229,206 @@
       "name": "Catálogo — Command Properties",
       "category": "Inventory",
       "items": [
-        { "id": "inv-cat-cmd-crud", "name": "Lista + CRUD Form", "complexity": 1, "done": false, "owner": "", "notes": "Lista existe, falta FormPage" }
+        {
+          "id": "inv-cat-cmd-list",
+          "name": "Catálogo",
+          "complexity": 1,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "inv-cat-cmd-form",
+          "name": "Formulario crear / editar",
+          "complexity": 1,
+          "done": false,
+          "owner": "India",
+          "notes": "https://github.com/everisopennetworks/symphony/pull/7144 - COSD-2533",
+          "status": "in-progress"
+        }
       ]
     },
     {
-      "id": "inv-discovery",
-      "name": "Discovery",
+      "id": "inv-disc-rules",
+      "name": "Discovery — Rules",
       "category": "Inventory",
       "items": [
-        { "id": "inv-disc-rules", "name": "Rules: Lista + CRUD Form + Scheduled + Subnets + IPs asociadas", "complexity": 3, "done": false, "owner": "", "notes": "Lista existe, falta FormPage completo" },
-        { "id": "inv-disc-cmdrules", "name": "Command Rules: Lista + CRUD Form", "complexity": 2, "done": false, "owner": "", "notes": "Lista existe, falta FormPage" },
-        { "id": "inv-disc-exec", "name": "Executions: Lista + filtros", "complexity": 2, "done": false, "owner": "", "notes": "Componente existe, falta conexión real" },
-        { "id": "inv-disc-mapping", "name": "Mapping + IPs + NMS: Lista + CRUD Form por cada uno", "complexity": 2, "done": false, "owner": "", "notes": "Listas existen, faltan FormPages" }
+        {
+          "id": "inv-disc-rules-list",
+          "name": "Catálogo",
+          "complexity": 1,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "inv-disc-rules-form",
+          "name": "Formulario crear / editar + Scheduled + Subnets + IPs",
+          "complexity": 3,
+          "done": false,
+          "owner": "",
+          "notes": "Falta FormPage completo"
+        }
       ]
     },
     {
-      "id": "inv-polling",
-      "name": "Polling",
+      "id": "inv-disc-cmdrules",
+      "name": "Discovery — Command Rules",
       "category": "Inventory",
       "items": [
-        { "id": "inv-poll-rules", "name": "Rules: Lista + CRUD Form + OIDs + categorías + bulk upload", "complexity": 3, "done": false, "owner": "", "notes": "Lista existe, falta FormPage completo" },
-        { "id": "inv-poll-exec", "name": "Executions + Equipment sin reglas asignadas", "complexity": 2, "done": false, "owner": "", "notes": "Componentes existen, falta conexión real" }
+        {
+          "id": "inv-disc-cmdrules-list",
+          "name": "Catálogo",
+          "complexity": 1,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "inv-disc-cmdrules-form",
+          "name": "Formulario crear / editar",
+          "complexity": 2,
+          "done": false,
+          "owner": "",
+          "notes": "Falta FormPage"
+        }
+      ]
+    },
+    {
+      "id": "inv-disc-exec",
+      "name": "Discovery — Executions",
+      "category": "Inventory",
+      "items": [
+        {
+          "id": "inv-disc-exec-list",
+          "name": "Catálogo",
+          "complexity": 2,
+          "done": true,
+          "owner": "",
+          "notes": "Revisar"
+        }
+      ]
+    },
+    {
+      "id": "inv-disc-mapping",
+      "name": "Discovery — Mapping",
+      "category": "Inventory",
+      "items": [
+        {
+          "id": "inv-disc-mapping-list",
+          "name": "Catálogo",
+          "complexity": 1,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "inv-disc-mapping-form",
+          "name": "Formulario crear / editar",
+          "complexity": 2,
+          "done": false,
+          "owner": "",
+          "notes": "Falta FormPage"
+        }
+      ]
+    },
+    {
+      "id": "inv-disc-ips",
+      "name": "Discovery — IPs",
+      "category": "Inventory",
+      "items": [
+        {
+          "id": "inv-disc-ips-list",
+          "name": "Catálogo",
+          "complexity": 1,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "inv-disc-ips-form",
+          "name": "Formulario crear / editar",
+          "complexity": 2,
+          "done": false,
+          "owner": "",
+          "notes": "Falta FormPage"
+        }
+      ]
+    },
+    {
+      "id": "inv-disc-nms",
+      "name": "Discovery — NMS",
+      "category": "Inventory",
+      "items": [
+        {
+          "id": "inv-disc-nms-list",
+          "name": "Catálogo",
+          "complexity": 1,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "inv-disc-nms-form",
+          "name": "Formulario crear / editar",
+          "complexity": 2,
+          "done": false,
+          "owner": "",
+          "notes": "Falta FormPage"
+        }
+      ]
+    },
+    {
+      "id": "inv-poll-rules",
+      "name": "Polling — Rules",
+      "category": "Inventory",
+      "items": [
+        {
+          "id": "inv-poll-rules-list",
+          "name": "Catálogo",
+          "complexity": 1,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "inv-poll-rules-form",
+          "name": "Formulario crear / editar",
+          "complexity": 3,
+          "done": false,
+          "owner": "",
+          "notes": "Falta FormPage completo"
+        }
+      ]
+    },
+    {
+      "id": "inv-poll-exec",
+      "name": "Polling — Executions",
+      "category": "Inventory",
+      "items": [
+        {
+          "id": "inv-poll-exec-list",
+          "name": "Catálogo",
+          "complexity": 2,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "id": "inv-poll-equip",
+      "name": "Polling — Equipment without polling",
+      "category": "Inventory",
+      "items": [
+        {
+          "id": "inv-poll-exec-list",
+          "name": "Catálogo",
+          "complexity": 2,
+          "done": true,
+          "owner": "Sergio",
+          "notes": "Revisar y refinar"
+        }
       ]
     },
     {
@@ -110,7 +436,22 @@
       "name": "MIBs — Custom OIDs",
       "category": "Inventory",
       "items": [
-        { "id": "inv-mibs-oids", "name": "Lista + CRUD Form + validación de nombre", "complexity": 1, "done": false, "owner": "", "notes": "Lista existe, falta FormPage" }
+        {
+          "id": "inv-mibs-list",
+          "name": "Catálogo",
+          "complexity": 1,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "inv-mibs-form",
+          "name": "Formulario crear / editar + validación de nombre",
+          "complexity": 1,
+          "done": true,
+          "owner": "India",
+          "notes": "https://github.com/everisopennetworks/symphony/pull/7128 - 2524"
+        }
       ]
     },
     {
@@ -118,7 +459,22 @@
       "name": "Map",
       "category": "Inventory",
       "items": [
-        { "id": "inv-map-views", "name": "Locations Map + Coverage Map + capas + popouts", "complexity": 5, "done": false, "owner": "", "notes": "Scaffold existe, falta implementación real" }
+        {
+          "id": "inv-map-views",
+          "name": "Locations Map + capas",
+          "complexity": 5,
+          "done": true,
+          "owner": "",
+          "notes": "Scaffold existe, falta implementación real"
+        },
+        {
+          "id": "inv-map-1778565913811",
+          "name": "Pop - up",
+          "complexity": 1,
+          "done": false,
+          "owner": "",
+          "notes": "El pop up no está funcionando bien"
+        }
       ]
     },
     {
@@ -126,7 +482,30 @@
       "name": "Topology View",
       "category": "Inventory",
       "items": [
-        { "id": "inv-topo-view", "name": "Vista fuerza-directa + panel KPIs + filtros + dialogs", "complexity": 5, "done": false, "owner": "", "notes": "Componente TopologyView.tsx existe, falta implementación real" }
+        {
+          "id": "inv-topo-view",
+          "name": "Vista inicial de topología (equipment type)",
+          "complexity": 5,
+          "done": true,
+          "owner": "",
+          "notes": "Componente TopologyView.tsx"
+        },
+        {
+          "id": "inv-topology-1778566056244",
+          "name": "Flujo de visualización de KPIs",
+          "complexity": 3,
+          "done": false,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "inv-topology-1778566065911",
+          "name": "Filtros",
+          "complexity": 2,
+          "done": false,
+          "owner": "",
+          "notes": ""
+        }
       ]
     },
     {
@@ -134,23 +513,22 @@
       "name": "Network Grouping",
       "category": "Inventory",
       "items": [
-        { "id": "inv-ng-full", "name": "Categorías CRUD + grupos estáticos + dinámicos + NEs table + bulk upload", "complexity": 8, "done": false, "owner": "", "notes": "No existe en app_new" }
-      ]
-    },
-    {
-      "id": "inv-reconciliation",
-      "name": "Network Reconciliation",
-      "category": "Inventory",
-      "items": [
-        { "id": "inv-rec-full", "name": "Rules CRUD + executions + cambios automáticos + stepper", "complexity": 8, "done": false, "owner": "", "notes": "No existe en app_new" }
-      ]
-    },
-    {
-      "id": "inv-actions",
-      "name": "Action Catalog & Execution",
-      "category": "Inventory",
-      "items": [
-        { "id": "inv-act-full", "name": "Configuración de acciones + stepper ejecución + acciones programadas", "complexity": 5, "done": false, "owner": "", "notes": "No existe en app_new" }
+        {
+          "id": "inv-ng-full",
+          "name": "Categorías CRUD + grupos estáticos + dinámicos + NEs table + bulk upload",
+          "complexity": 8,
+          "done": false,
+          "owner": "",
+          "notes": "No existe en app_new"
+        },
+        {
+          "id": "inv-netgroup-1778566167843",
+          "name": "Flujo de Grupos dinámicos",
+          "complexity": 5,
+          "done": false,
+          "owner": "",
+          "notes": ""
+        }
       ]
     },
     {
@@ -158,9 +536,22 @@
       "name": "Work Orders",
       "category": "Workforce",
       "items": [
-        { "id": "wf-wo-list", "name": "Lista + búsqueda + filtros (Power Search)", "complexity": 3, "done": true, "owner": "", "notes": "" },
-        { "id": "wf-wo-crud", "name": "CRUD Form: crear / editar / ver + checklist + categorías", "complexity": 3, "done": true, "owner": "", "notes": "" },
-        { "id": "wf-wo-extras", "name": "Materials tab, Export, Map view, Comentarios/Actividades", "complexity": 3, "done": false, "owner": "", "notes": "Materials tab parcial, resto falta" }
+        {
+          "id": "wf-wo-list",
+          "name": "Catálogo",
+          "complexity": 3,
+          "done": true,
+          "owner": "Sergio",
+          "notes": ""
+        },
+        {
+          "id": "wf-wo-crud",
+          "name": "CRUD Form: crear / editar / ver + checklist + categorías",
+          "complexity": 5,
+          "done": true,
+          "owner": "Sergio",
+          "notes": ""
+        }
       ]
     },
     {
@@ -168,8 +559,22 @@
       "name": "Projects",
       "category": "Workforce",
       "items": [
-        { "id": "wf-proj-list", "name": "Lista + búsqueda + filtros", "complexity": 2, "done": true, "owner": "", "notes": "" },
-        { "id": "wf-proj-crud", "name": "CRUD Form: crear / editar / ver + lista de Work Orders", "complexity": 3, "done": true, "owner": "", "notes": "" }
+        {
+          "id": "wf-proj-list",
+          "name": "Lista + búsqueda + filtros",
+          "complexity": 2,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "wf-proj-crud",
+          "name": "CRUD Form: crear / editar / ver + lista de Work Orders",
+          "complexity": 3,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        }
       ]
     },
     {
@@ -177,7 +582,22 @@
       "name": "Configuración — Work Order Types",
       "category": "Workforce",
       "items": [
-        { "id": "wf-cfg-wot-crud", "name": "Lista + CRUD Form", "complexity": 2, "done": false, "owner": "", "notes": "Lista existe, falta FormPage" }
+        {
+          "id": "wf-cfg-wot-list",
+          "name": "Catálogo",
+          "complexity": 1,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "wf-cfg-wot-form",
+          "name": "Formulario crear / editar",
+          "complexity": 2,
+          "done": false,
+          "owner": "",
+          "notes": "Falta FormPage"
+        }
       ]
     },
     {
@@ -185,7 +605,22 @@
       "name": "Configuración — Project Types",
       "category": "Workforce",
       "items": [
-        { "id": "wf-cfg-pt-crud", "name": "Lista + CRUD Form", "complexity": 2, "done": false, "owner": "", "notes": "Lista existe, falta FormPage" }
+        {
+          "id": "wf-cfg-pt-list",
+          "name": "Catálogo",
+          "complexity": 1,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "wf-cfg-pt-form",
+          "name": "Formulario crear / editar",
+          "complexity": 2,
+          "done": false,
+          "owner": "",
+          "notes": "Falta FormPage"
+        }
       ]
     },
     {
@@ -193,7 +628,22 @@
       "name": "Configuración — Contract Types",
       "category": "Workforce",
       "items": [
-        { "id": "wf-cfg-ct-crud", "name": "Lista + CRUD Form", "complexity": 1, "done": false, "owner": "", "notes": "Lista existe, falta FormPage" }
+        {
+          "id": "wf-cfg-ct-list",
+          "name": "Catálogo",
+          "complexity": 1,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "wf-cfg-ct-form",
+          "name": "Formulario crear / editar",
+          "complexity": 1,
+          "done": false,
+          "owner": "",
+          "notes": "Falta FormPage"
+        }
       ]
     },
     {
@@ -201,7 +651,23 @@
       "name": "Configuración — Materials",
       "category": "Workforce",
       "items": [
-        { "id": "wf-cfg-mat-crud", "name": "Lista + CRUD Form", "complexity": 2, "done": false, "owner": "", "notes": "Lista existe, falta FormPage" }
+        {
+          "id": "wf-cfg-mat-list",
+          "name": "Catálogo",
+          "complexity": 2,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "wf-cfg-mat-form",
+          "name": "Formulario crear / editar",
+          "complexity": 2,
+          "done": false,
+          "owner": "India",
+          "notes": "https://github.com/everisopennetworks/symphony/pull/7143 - COSD-2534",
+          "status": "in-progress"
+        }
       ]
     },
     {
@@ -209,67 +675,175 @@
       "name": "Configuración — Material Kits",
       "category": "Workforce",
       "items": [
-        { "id": "wf-cfg-mk-crud", "name": "Lista + CRUD Form (con composición de items)", "complexity": 2, "done": false, "owner": "", "notes": "Lista existe, falta FormPage" }
+        {
+          "id": "wf-cfg-mk-list",
+          "name": "Catálogo",
+          "complexity": 1,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "wf-cfg-mk-form",
+          "name": "Formulario crear / editar (composición de items)",
+          "complexity": 2,
+          "done": false,
+          "owner": "",
+          "notes": "Falta FormPage"
+        }
       ]
     },
     {
-      "id": "as-counters",
-      "name": "Counters",
+      "id": "as-cfg-counters",
+      "name": "Configuración — Counters",
       "category": "Assurance",
       "items": [
-        { "id": "as-cnt-list", "name": "Lista + filtros + bulk upload CSV", "complexity": 2, "done": true, "owner": "", "notes": "" },
-        { "id": "as-cnt-crud", "name": "CRUD Form: crear / editar / ver", "complexity": 3, "done": true, "owner": "", "notes": "" }
+        {
+          "id": "as-cnt-list",
+          "name": "Catálogo",
+          "complexity": 2,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "as-cnt-crud",
+          "name": "Formulario crear / editar",
+          "complexity": 3,
+          "done": true,
+          "owner": "India",
+          "notes": "https://github.com/everisopennetworks/symphony/pull/7057"
+        }
       ]
     },
     {
-      "id": "as-kpis",
-      "name": "KPIs",
+      "id": "as-cfg-kpis",
+      "name": "Configuración — KPIs",
       "category": "Assurance",
       "items": [
-        { "id": "as-kpi-list", "name": "Lista + filtros + bulk upload", "complexity": 2, "done": false, "owner": "", "notes": "Lista básica existe, falta filtros y bulk" },
-        { "id": "as-kpi-crud", "name": "CRUD Form + fórmulas + aggregations + domain", "complexity": 3, "done": false, "owner": "", "notes": "Falta FormPage" }
+        {
+          "id": "as-kpi-list",
+          "name": "Catálogo",
+          "complexity": 2,
+          "done": true,
+          "owner": "Sergio",
+          "notes": "Lista básica existe, falta filtros y bulk"
+        },
+        {
+          "id": "as-kpi-crud",
+          "name": "Formulario crear / editar + fórmulas + aggregations + domain",
+          "complexity": 5,
+          "done": false,
+          "owner": "",
+          "notes": "Falta FormPage"
+        }
       ]
     },
     {
-      "id": "as-thresholds",
-      "name": "Thresholds",
+      "id": "as-cfg-thresholds",
+      "name": "Configuración — Thresholds",
       "category": "Assurance",
       "items": [
-        { "id": "as-thr-list", "name": "Lista + filtros", "complexity": 2, "done": false, "owner": "", "notes": "Lista básica existe" },
-        { "id": "as-thr-crud", "name": "CRUD Form + algoritmos + alarms + NEs + períodos efectivos", "complexity": 5, "done": false, "owner": "", "notes": "Falta FormPage — muy complejo" }
+        {
+          "id": "as-thr-list",
+          "name": "Catálogo",
+          "complexity": 2,
+          "done": true,
+          "owner": "Sergio",
+          "notes": "Lista básica existe"
+        },
+        {
+          "id": "as-thr-crud",
+          "name": "Formulario crear / editar + algoritmos + alarms + NEs + períodos efectivos",
+          "complexity": 5,
+          "done": false,
+          "owner": "",
+          "notes": "Falta FormPage — muy complejo"
+        }
       ]
     },
     {
-      "id": "as-busyhour",
-      "name": "Busy Hour",
+      "id": "as-cfg-busyhour",
+      "name": "Configuración — Busy Hour",
       "category": "Assurance",
       "items": [
-        { "id": "as-bh-crud", "name": "Lista + CRUD Form + time accordion + períodos", "complexity": 3, "done": false, "owner": "", "notes": "Lista básica existe, falta FormPage" }
+        {
+          "id": "as-bh-list",
+          "name": "Catálogo",
+          "complexity": 1,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "as-bh-form",
+          "name": "Formulario crear / editar + time accordion + períodos",
+          "complexity": 3,
+          "done": false,
+          "owner": "",
+          "notes": "Falta FormPage"
+        }
       ]
     },
     {
-      "id": "as-params",
-      "name": "Parameters",
+      "id": "as-cfg-params",
+      "name": "Configuración — Parameters",
       "category": "Assurance",
       "items": [
-        { "id": "as-par-crud", "name": "Lista + CRUD Form + entidad asociada", "complexity": 3, "done": false, "owner": "", "notes": "Lista básica existe, falta FormPage" }
+        {
+          "id": "as-par-list",
+          "name": "Catálogo",
+          "complexity": 1,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "as-par-form",
+          "name": "Formulario crear / editar + entidad asociada",
+          "complexity": 3,
+          "done": false,
+          "owner": "",
+          "notes": "Falta FormPage"
+        }
       ]
     },
     {
-      "id": "as-portal",
-      "name": "Tools + Fault Operations",
+      "id": "as-tools",
+      "name": "Tools",
       "category": "Assurance",
       "items": [
-        { "id": "as-tools", "name": "Tools: lista de herramientas disponibles", "complexity": 2, "done": false, "owner": "", "notes": "Componente básico existe" },
-        { "id": "as-faults", "name": "Fault Operations: lista + filtros + detalle + historial", "complexity": 3, "done": false, "owner": "", "notes": "Componente básico existe, falta detalle y filtros" }
+        {
+          "id": "as-tools-list",
+          "name": "Catálogo",
+          "complexity": 2,
+          "done": true,
+          "owner": "",
+          "notes": "Componente básico existe"
+        }
       ]
     },
     {
-      "id": "as-kpiview",
-      "name": "KPI Visualization",
+      "id": "as-faults",
+      "name": "Fault Operations",
       "category": "Assurance",
       "items": [
-        { "id": "as-kpiv-full", "name": "KPI View dashboard + KPI Stack + Drilldown + filtros + NEs preview + charts", "complexity": 8, "done": false, "owner": "", "notes": "No existe en app_new — subsistema completo" }
+        {
+          "id": "as-faults-list",
+          "name": "Catálogo",
+          "complexity": 2,
+          "done": true,
+          "owner": "Sergio",
+          "notes": "Revisar"
+        },
+        {
+          "id": "as-faults-detail",
+          "name": "Vista detalle + historial",
+          "complexity": 3,
+          "done": false,
+          "owner": "",
+          "notes": "Falta implementación"
+        }
       ]
     },
     {
@@ -277,23 +851,37 @@
       "name": "Superset Dashboard",
       "category": "Assurance",
       "items": [
-        { "id": "as-super-full", "name": "Embed iframe + sidebar tree + CRUD dashboards", "complexity": 5, "done": false, "owner": "", "notes": "No existe en app_new" }
+        {
+          "id": "as-super-full",
+          "name": "Embed iframe + sidebar tree + CRUD dashboards",
+          "complexity": 5,
+          "done": false,
+          "owner": "",
+          "notes": "No existe en app_new"
+        }
       ]
     },
     {
       "id": "as-managed",
-      "name": "Managed Objects + KQI",
+      "name": "Managed Objects",
       "category": "Assurance",
       "items": [
-        { "id": "as-mo-full", "name": "Managed Objects CRUD + categorías + KQI Targets + Sources + Indicators", "complexity": 5, "done": false, "owner": "", "notes": "No existe en app_new" }
-      ]
-    },
-    {
-      "id": "as-alarms",
-      "name": "Alarm Filtering",
-      "category": "Assurance",
-      "items": [
-        { "id": "as-alm-full", "name": "Lista + Form + Status + Tipos de filtrado", "complexity": 3, "done": false, "owner": "", "notes": "No existe en app_new" }
+        {
+          "id": "as-mo-full",
+          "name": "Managed Objects Catalogo",
+          "complexity": 3,
+          "done": false,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "as-managed-1778567453124",
+          "name": "Managed Object - CRUD",
+          "complexity": 3,
+          "done": false,
+          "owner": "",
+          "notes": ""
+        }
       ]
     },
     {
@@ -301,7 +889,53 @@
       "name": "Network Group Navigator",
       "category": "Assurance",
       "items": [
-        { "id": "as-ngn-full", "name": "Tree view + stack chart + equipment panel + KPI list", "complexity": 5, "done": false, "owner": "", "notes": "No existe en app_new" }
+        {
+          "id": "as-ngn-full",
+          "name": "Tree view + stack chart + equipment panel + KPI list",
+          "complexity": 8,
+          "done": false,
+          "owner": "",
+          "notes": "No existe en app_new"
+        }
+      ]
+    },
+    {
+      "id": "as-kpiview",
+      "name": "KPI Visualization",
+      "category": "Assurance",
+      "items": [
+        {
+          "id": "as-kpiv-full1",
+          "name": "Fase 1 - charts",
+          "complexity": 8,
+          "done": false,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "as-kpiv-full2",
+          "name": "Fase 2 - filtros",
+          "complexity": 8,
+          "done": false,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "as-kpiv-full3",
+          "name": "Fase 3 - flujo",
+          "complexity": 8,
+          "done": false,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "as-kpiview-1778567721140",
+          "name": "Fase 4",
+          "complexity": 5,
+          "done": false,
+          "owner": "",
+          "notes": ""
+        }
       ]
     },
     {
@@ -309,7 +943,15 @@
       "name": "Reports Management",
       "category": "Reports",
       "items": [
-        { "id": "rep-mgmt-full", "name": "Lista + árbol de categorías + filtros + eliminación", "complexity": 3, "done": false, "owner": "", "notes": "Parcialmente en Reports.tsx, falta árbol y gestión" }
+        {
+          "id": "rep-mgmt-full",
+          "name": "Lista + árbol de categorías",
+          "complexity": 3,
+          "done": false,
+          "owner": "Miguel Fruto",
+          "notes": "Parcialmente en Reports.tsx, falta árbol y gestión",
+          "status": "in-progress"
+        }
       ]
     },
     {
@@ -317,7 +959,30 @@
       "name": "Report Configuration (Builder)",
       "category": "Reports",
       "items": [
-        { "id": "rep-cfg-full", "name": "Form + Sheets + Attributes + Fórmulas + KPI/Counter selection + File order + Time config", "complexity": 8, "done": false, "owner": "", "notes": "No existe en app_new — el bloque más grande del módulo Reports" }
+        {
+          "id": "rep-cfg-full",
+          "name": "Form + Sheets + Attributes + Fórmulas + KPI/Counter selection + File order + Time config - Fase 1",
+          "complexity": 8,
+          "done": false,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "rep-configuration-1778567705307",
+          "name": "Form + Sheets + Attributes + Fórmulas + KPI/Counter selection + File order + Time config - Fase 2",
+          "complexity": 8,
+          "done": false,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "rep-configuration-1778567748609",
+          "name": "Catálogo",
+          "complexity": 3,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        }
       ]
     },
     {
@@ -325,8 +990,22 @@
       "name": "Report Scheduling",
       "category": "Reports",
       "items": [
-        { "id": "rep-sched-list", "name": "Lista + filtros", "complexity": 2, "done": true, "owner": "", "notes": "" },
-        { "id": "rep-sched-crud", "name": "CRUD Form: crear / editar / ver + notificaciones", "complexity": 3, "done": true, "owner": "", "notes": "" }
+        {
+          "id": "rep-sched-list",
+          "name": "Lista + filtros",
+          "complexity": 2,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "rep-sched-crud",
+          "name": "CRUD Form: crear / editar / ver",
+          "complexity": 3,
+          "done": true,
+          "owner": "Sergio",
+          "notes": "Revisar Picker"
+        }
       ]
     },
     {
@@ -334,7 +1013,14 @@
       "name": "Report Executions",
       "category": "Reports",
       "items": [
-        { "id": "rep-exec-list", "name": "Lista paginada + filtros + descarga", "complexity": 2, "done": true, "owner": "", "notes": "" }
+        {
+          "id": "rep-exec-list",
+          "name": "Lista paginada + filtros",
+          "complexity": 2,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        }
       ]
     },
     {
@@ -342,8 +1028,22 @@
       "name": "Usuarios",
       "category": "Admin",
       "items": [
-        { "id": "adm-usr-list", "name": "Lista + filtros", "complexity": 2, "done": false, "owner": "", "notes": "Lista básica existe, falta filtros" },
-        { "id": "adm-usr-crud", "name": "CRUD Form + roles + profile + status + grupos asignados", "complexity": 3, "done": false, "owner": "", "notes": "Falta FormPage" }
+        {
+          "id": "adm-usr-list",
+          "name": "Catálogo",
+          "complexity": 2,
+          "done": true,
+          "owner": "",
+          "notes": "Lista básica existe, falta filtros"
+        },
+        {
+          "id": "adm-usr-crud",
+          "name": "CRUD Form + roles + profile + status + grupos asignados",
+          "complexity": 5,
+          "done": false,
+          "owner": "",
+          "notes": "Falta FormPage"
+        }
       ]
     },
     {
@@ -351,8 +1051,22 @@
       "name": "Permission Groups",
       "category": "Admin",
       "items": [
-        { "id": "adm-grp-list", "name": "Lista + filtros", "complexity": 2, "done": false, "owner": "", "notes": "Lista básica existe" },
-        { "id": "adm-grp-crud", "name": "CRUD Form + members + policies asignadas", "complexity": 3, "done": false, "owner": "", "notes": "Falta FormPage" }
+        {
+          "id": "adm-grp-list",
+          "name": "Catálogo",
+          "complexity": 2,
+          "done": true,
+          "owner": "",
+          "notes": "Lista básica existe"
+        },
+        {
+          "id": "adm-grp-crud",
+          "name": "CRUD Form + members + policies asignadas",
+          "complexity": 5,
+          "done": false,
+          "owner": "",
+          "notes": "Falta FormPage"
+        }
       ]
     },
     {
@@ -360,8 +1074,22 @@
       "name": "Permission Policies",
       "category": "Admin",
       "items": [
-        { "id": "adm-pol-list", "name": "Lista + filtros", "complexity": 2, "done": false, "owner": "", "notes": "Lista básica existe" },
-        { "id": "adm-pol-crud", "name": "CRUD Form + secciones de reglas (Inventory, Workforce, Reports, Assurance)", "complexity": 5, "done": false, "owner": "", "notes": "Falta FormPage — muy complejo por todas las secciones de reglas" }
+        {
+          "id": "adm-pol-list",
+          "name": "Catálogos",
+          "complexity": 2,
+          "done": true,
+          "owner": "",
+          "notes": "Lista básica existe"
+        },
+        {
+          "id": "adm-pol-crud",
+          "name": "CRUD Form + secciones de reglas (Inventory, Workforce, Reports, Assurance)",
+          "complexity": 5,
+          "done": false,
+          "owner": "",
+          "notes": "Falta FormPage — muy complejo por todas las secciones de reglas"
+        }
       ]
     },
     {
@@ -369,7 +1097,22 @@
       "name": "Organizations",
       "category": "Admin",
       "items": [
-        { "id": "adm-org-full", "name": "Lista + CRUD Form + members + templates", "complexity": 3, "done": false, "owner": "", "notes": "No existe en app_new (módulo Master en legacy)" }
+        {
+          "id": "adm-org-list",
+          "name": "Catálogo",
+          "complexity": 1,
+          "done": false,
+          "owner": "",
+          "notes": "No existe en app_new (módulo Master en legacy)"
+        },
+        {
+          "id": "adm-org-form",
+          "name": "Formulario crear / editar + members + templates",
+          "complexity": 3,
+          "done": false,
+          "owner": "",
+          "notes": "No existe en app_new"
+        }
       ]
     },
     {
@@ -377,7 +1120,22 @@
       "name": "Holiday Management",
       "category": "Admin",
       "items": [
-        { "id": "adm-hol-full", "name": "Lista + CRUD Form + bulk upload CSV", "complexity": 2, "done": false, "owner": "", "notes": "No existe en app_new" }
+        {
+          "id": "adm-hol-list",
+          "name": "Catálogo",
+          "complexity": 1,
+          "done": false,
+          "owner": "",
+          "notes": "No existe en app_new"
+        },
+        {
+          "id": "adm-hol-form",
+          "name": "Formulario crear / editar",
+          "complexity": 1,
+          "done": false,
+          "owner": "",
+          "notes": "No existe en app_new"
+        }
       ]
     },
     {
@@ -385,7 +1143,14 @@
       "name": "Audit Log",
       "category": "Admin",
       "items": [
-        { "id": "adm-audit-full", "name": "Lista paginada + filtros + exportar", "complexity": 3, "done": false, "owner": "", "notes": "No existe en app_new" }
+        {
+          "id": "adm-audit-full",
+          "name": "Lista paginada + filtros + exportar",
+          "complexity": 2,
+          "done": false,
+          "owner": "",
+          "notes": "No existe en app_new"
+        }
       ]
     },
     {
@@ -393,8 +1158,22 @@
       "name": "Notification Groups",
       "category": "Admin",
       "items": [
-        { "id": "adm-ng-list", "name": "Lista + filtros", "complexity": 2, "done": false, "owner": "", "notes": "Lista básica existe" },
-        { "id": "adm-ng-crud", "name": "CRUD Form + contactos + server config SMTP", "complexity": 3, "done": false, "owner": "", "notes": "Falta FormPage" }
+        {
+          "id": "adm-ng-list",
+          "name": "Catálogo",
+          "complexity": 2,
+          "done": true,
+          "owner": "",
+          "notes": "Lista básica existe"
+        },
+        {
+          "id": "adm-ng-crud",
+          "name": "CRUD Form + contactos + server config SMTP",
+          "complexity": 3,
+          "done": false,
+          "owner": "",
+          "notes": "Falta FormPage"
+        }
       ]
     },
     {
@@ -402,8 +1181,22 @@
       "name": "Flows",
       "category": "Automation",
       "items": [
-        { "id": "auto-fl-list", "name": "Lista + filtros + eliminación", "complexity": 2, "done": false, "owner": "", "notes": "Lista básica existe" },
-        { "id": "auto-fl-builder", "name": "Flow Builder: canvas drag & drop + nodos + conexiones", "complexity": 8, "done": false, "owner": "", "notes": "No existe en app_new — el builder gráfico es el core de este módulo" }
+        {
+          "id": "auto-fl-list",
+          "name": "Catálogo de flows",
+          "complexity": 2,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "auto-fl-button",
+          "name": "Que el botón abra el canva de creación de flows",
+          "complexity": 1,
+          "done": false,
+          "owner": "",
+          "notes": "Lista básica existe"
+        }
       ]
     },
     {
@@ -411,26 +1204,14 @@
       "name": "Operation (Flow Instances)",
       "category": "Automation",
       "items": [
-        { "id": "auto-op-list", "name": "Lista de instancias + filtros + búsqueda", "complexity": 3, "done": false, "owner": "", "notes": "Lista básica existe" },
-        { "id": "auto-op-detail", "name": "Detalle de instancia + acciones (cancel/retry) + timeline", "complexity": 5, "done": false, "owner": "", "notes": "Falta detalle completo" }
-      ]
-    },
-    {
-      "id": "ful-services",
-      "name": "Services (Fulfillment)",
-      "category": "Fulfillment",
-      "items": [
-        { "id": "ful-svc-list", "name": "Lista + filtros", "complexity": 3, "done": false, "owner": "", "notes": "Existe en mocks, no conectado a API real" },
-        { "id": "ful-svc-crud", "name": "CRUD Form + endpoints + links de red", "complexity": 5, "done": false, "owner": "", "notes": "No implementado" }
-      ]
-    },
-    {
-      "id": "ful-serviceorders",
-      "name": "Service Orders",
-      "category": "Fulfillment",
-      "items": [
-        { "id": "ful-so-list", "name": "Lista + filtros", "complexity": 3, "done": false, "owner": "", "notes": "Existe en mocks, no conectado a API real" },
-        { "id": "ful-so-crud", "name": "CRUD Form + líneas de servicio", "complexity": 5, "done": false, "owner": "", "notes": "No implementado" }
+        {
+          "id": "auto-op-list",
+          "name": "Catálogo de operaciones",
+          "complexity": 2,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        }
       ]
     },
     {
@@ -438,7 +1219,14 @@
       "name": "Comments & Activities",
       "category": "Cross-cutting",
       "items": [
-        { "id": "cx-com-full", "name": "Componente genérico + integraciones en WO, Equipment, Location", "complexity": 3, "done": false, "owner": "", "notes": "No existe en app_new" }
+        {
+          "id": "cx-com-full",
+          "name": "Componente genérico + integraciones en WO, Equipment, Location",
+          "complexity": 3,
+          "done": true,
+          "owner": "",
+          "notes": "No existe en app_new"
+        }
       ]
     },
     {
@@ -446,7 +1234,30 @@
       "name": "Power Search & Bookmarks",
       "category": "Cross-cutting",
       "items": [
-        { "id": "cx-ps-full", "name": "Power Search genérico reutilizable + Filter Bookmarks CRUD", "complexity": 5, "done": false, "owner": "", "notes": "Existe de forma acoplada por módulo, falta componente genérico y bookmarks" }
+        {
+          "id": "cx-ps-full",
+          "name": "Power Search genérico reutilizable + Filter Bookmarks CRUD",
+          "complexity": 8,
+          "done": false,
+          "owner": "",
+          "notes": "Existe de forma acoplada por módulo, falta componente genérico y bookmarks"
+        },
+        {
+          "id": "cx-powersearch-1778567817423",
+          "name": "Implementación del filtro en los diferentes sistemas - fase 1",
+          "complexity": 8,
+          "done": false,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "cx-powersearch-1778567842640",
+          "name": "Implementación del filtro en los diferentes sistemas - fase 2",
+          "complexity": 8,
+          "done": false,
+          "owner": "",
+          "notes": ""
+        }
       ]
     },
     {
@@ -454,7 +1265,30 @@
       "name": "Home Dashboard",
       "category": "Cross-cutting",
       "items": [
-        { "id": "cx-home-full", "name": "Dashboard: cards, chart renderer, chatbot panel, footer", "complexity": 3, "done": true, "owner": "", "notes": "" }
+        {
+          "id": "cx-home-full",
+          "name": "Dashboard: cards, chart renderer, chatbot panel, footer",
+          "complexity": 3,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "cx-home-1778567867258",
+          "name": "Layouts iniciales",
+          "complexity": 8,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        },
+        {
+          "id": "cx-home-1778567878590",
+          "name": "Componentes iniciales",
+          "complexity": 8,
+          "done": true,
+          "owner": "",
+          "notes": ""
+        }
       ]
     }
   ]

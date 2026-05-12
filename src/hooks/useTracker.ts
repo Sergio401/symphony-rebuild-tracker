@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import type { Module, TrackerState, OverrideItem, SaveStatus, Complexity, ItemStatus } from '../types';
+import type { Module, Item, TrackerState, OverrideItem, SaveStatus, Complexity, ItemStatus } from '../types';
 import modulesData from '../data/modules.json';
 
 const LOCALSTORAGE_KEY = 'symphony_tracker_state';
@@ -29,11 +29,20 @@ async function persistState(state: TrackerState): Promise<void> {
   }
 }
 
+async function writeModulesJson(updated: typeof modulesData): Promise<void> {
+  await fetch('/api/dev/modules', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(updated),
+  });
+}
+
 export function getEffectiveItem(module: Module, itemId: string, overrides: Record<string, OverrideItem>) {
   const base = module.items.find((i) => i.id === itemId)!;
   const override = overrides[itemId] ?? {};
   const baseDone = override.done ?? base.done;
-  const status: ItemStatus = override.status ?? (baseDone ? 'done' : 'pending');
+  const baseStatus: ItemStatus = base.status ?? (baseDone ? 'done' : 'pending');
+  const status: ItemStatus = override.status ?? baseStatus;
   return {
     ...base,
     status,
@@ -117,5 +126,66 @@ export function useTracker() {
     [scheduleSave],
   );
 
-  return { modules, overrides, saveStatus, loaded, updateItem };
+  // Dev-only: writes directly to modules.json (Vite HMR picks up the change)
+  const updateItemName = useCallback(async (itemId: string, name: string) => {
+    const updated = {
+      ...modulesData,
+      modules: modulesData.modules.map((mod) => ({
+        ...mod,
+        items: mod.items.map((item) =>
+          item.id === itemId ? { ...item, name } : item,
+        ),
+      })),
+    };
+    await writeModulesJson(updated as typeof modulesData);
+  }, []);
+
+  // Dev-only: adds a new item to a module in modules.json
+  const addItem = useCallback(async (moduleId: string) => {
+    const newItem: Item = {
+      id: `${moduleId}-${Date.now()}`,
+      name: '',
+      complexity: 2,
+      done: false,
+      owner: '',
+      notes: '',
+    };
+    const updated = {
+      ...modulesData,
+      modules: modulesData.modules.map((mod) =>
+        mod.id === moduleId
+          ? { ...mod, items: [...mod.items, newItem] }
+          : mod,
+      ),
+    };
+    await writeModulesJson(updated as typeof modulesData);
+  }, []);
+
+  // Dev-only: bakes all overrides into modules.json and clears local state
+  const bakeState = useCallback(async () => {
+    const updated = {
+      ...modulesData,
+      modules: modules.map((mod) => ({
+        ...mod,
+        items: mod.items.map((item) => {
+          const effective = getEffectiveItem(mod, item.id, overrides);
+          const baked: Record<string, unknown> = {
+            id: item.id,
+            name: item.name,
+            complexity: effective.complexity,
+            done: effective.done,
+            owner: effective.owner,
+            notes: effective.notes,
+          };
+          if (effective.status === 'in-progress') baked.status = 'in-progress';
+          return baked;
+        }),
+      })),
+    };
+    await writeModulesJson(updated as typeof modulesData);
+    localStorage.removeItem(LOCALSTORAGE_KEY);
+    setOverrides({});
+  }, [modules, overrides]);
+
+  return { modules, overrides, saveStatus, loaded, updateItem, updateItemName, addItem, bakeState };
 }

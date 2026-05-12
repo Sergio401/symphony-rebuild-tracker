@@ -7,6 +7,7 @@ export interface Item {
   name: string;
   complexity: Complexity;
   done: boolean;
+  status?: ItemStatus;
   owner: string;
   notes: string;
 }

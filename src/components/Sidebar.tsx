@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { computeModuleProgress } from '../hooks/useTracker';
 import type { Module, OverrideItem } from '../types';
 
@@ -27,7 +28,61 @@ interface Props {
   onViewChange: (v: ActiveView) => void;
 }
 
+function parseGroup(name: string): { group: string | null; displayName: string } {
+  const idx = name.indexOf(' — ');
+  if (idx === -1) return { group: null, displayName: name };
+  return { group: name.slice(0, idx), displayName: name.slice(idx + 3) };
+}
+
+type Entry =
+  | { kind: 'standalone'; mod: Module }
+  | { kind: 'group'; name: string; mods: Module[] };
+
+function buildEntries(mods: Module[]): Entry[] {
+  const entries: Entry[] = [];
+  const groupMap: Record<string, Module[]> = {};
+  for (const mod of mods) {
+    const { group } = parseGroup(mod.name);
+    if (!group) {
+      entries.push({ kind: 'standalone', mod });
+    } else {
+      if (!groupMap[group]) {
+        groupMap[group] = [];
+        entries.push({ kind: 'group', name: group, mods: groupMap[group] });
+      }
+      groupMap[group].push(mod);
+    }
+  }
+  return entries;
+}
+
+function groupProgress(mods: Module[], overrides: Record<string, OverrideItem>) {
+  let total = 0, done = 0;
+  for (const mod of mods) {
+    for (const item of mod.items) {
+      const ov = overrides[item.id] ?? {};
+      const c = (ov.complexity ?? item.complexity) as number;
+      total += c;
+      const isDone = ov.status === 'done' || (ov.done ?? item.done);
+      if (isDone) done += c;
+    }
+  }
+  return total > 0 ? Math.round((done / total) * 100) : 0;
+}
+
 export function Sidebar({ modules, overrides, selectedModuleId, selectedCategory, activeView, onSelectModule, onSelectCategory, onViewChange }: Props) {
+  const [groupStates, setGroupStates] = useState<Record<string, boolean>>({});
+
+  function isGroupOpen(key: string, groupMods: Module[]) {
+    if (key in groupStates) return groupStates[key];
+    return groupMods.some((m) => m.id === selectedModuleId);
+  }
+
+  function toggleGroup(key: string, groupMods: Module[]) {
+    const current = isGroupOpen(key, groupMods);
+    setGroupStates((prev) => ({ ...prev, [key]: !current }));
+  }
+
   const grouped = CATEGORY_ORDER.reduce<Record<string, Module[]>>((acc, cat) => {
     const mods = modules.filter((m) => m.category === cat);
     if (mods.length > 0) acc[cat] = mods;
@@ -42,26 +97,20 @@ export function Sidebar({ modules, overrides, selectedModuleId, selectedCategory
       </div>
 
       <nav className="flex-1 py-3">
-        {/* Dashboard link */}
         <button
           onClick={() => onViewChange('dashboard')}
           className={`w-full text-left px-4 py-2 flex items-center gap-2 text-xs font-semibold mb-1 transition-colors rounded-lg mx-0 ${
-            activeView === 'dashboard'
-              ? 'bg-blue-600 text-white'
-              : 'text-gray-400 hover:text-white hover:bg-gray-800'
+            activeView === 'dashboard' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800'
           }`}
         >
           <span>📈</span>
           <span>Dashboard</span>
         </button>
 
-        {/* All modules */}
         <button
           onClick={() => { onSelectModule(null); onSelectCategory(null); onViewChange('tracker'); }}
           className={`w-full text-left px-4 py-2 text-xs font-semibold uppercase tracking-wider mb-1 transition-colors ${
-            activeView === 'tracker' && !selectedModuleId && !selectedCategory
-              ? 'text-blue-400'
-              : 'text-gray-400 hover:text-white'
+            activeView === 'tracker' && !selectedModuleId && !selectedCategory ? 'text-blue-400' : 'text-gray-400 hover:text-white'
           }`}
         >
           Todos los módulos
@@ -71,10 +120,12 @@ export function Sidebar({ modules, overrides, selectedModuleId, selectedCategory
           const catTotal = mods.reduce((s, m) => s + m.items.reduce((ss, i) => ss + ((overrides[i.id]?.complexity ?? i.complexity) as number), 0), 0);
           const catDone = mods.reduce((s, m) => s + m.items.filter((i) => overrides[i.id]?.done ?? i.done).reduce((ss, i) => ss + ((overrides[i.id]?.complexity ?? i.complexity) as number), 0), 0);
           const catPct = catTotal > 0 ? Math.round((catDone / catTotal) * 100) : 0;
-          const isExpanded = selectedCategory === category || mods.some((m) => m.id === selectedModuleId);
+          const isCatExpanded = selectedCategory === category || mods.some((m) => m.id === selectedModuleId);
+          const entries = buildEntries(mods);
 
           return (
             <div key={category} className="mb-1">
+              {/* Category header */}
               <button
                 onClick={() => {
                   onSelectModule(null);
@@ -82,7 +133,7 @@ export function Sidebar({ modules, overrides, selectedModuleId, selectedCategory
                   onViewChange('tracker');
                 }}
                 className={`w-full text-left px-4 py-2 flex items-center gap-2 transition-colors text-xs font-semibold uppercase tracking-wider ${
-                  isExpanded ? 'text-white' : 'text-gray-400 hover:text-white'
+                  isCatExpanded ? 'text-white' : 'text-gray-400 hover:text-white'
                 }`}
               >
                 <span>{CATEGORY_ICONS[category] ?? '•'}</span>
@@ -92,26 +143,75 @@ export function Sidebar({ modules, overrides, selectedModuleId, selectedCategory
                 </span>
               </button>
 
-              {isExpanded && (
+              {isCatExpanded && (
                 <div className="ml-2">
-                  {mods.map((mod) => {
-                    const pct = computeModuleProgress(mod, overrides);
-                    const isSelected = mod.id === selectedModuleId;
+                  {entries.map((entry) => {
+                    if (entry.kind === 'standalone') {
+                      const pct = computeModuleProgress(entry.mod, overrides);
+                      const isSelected = entry.mod.id === selectedModuleId;
+                      return (
+                        <button
+                          key={entry.mod.id}
+                          onClick={() => { onSelectModule(entry.mod.id); onSelectCategory(category); onViewChange('tracker'); }}
+                          className={`w-full text-left px-4 py-1.5 flex items-center gap-2 rounded-lg mx-1 transition-colors text-xs ${
+                            isSelected ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                          }`}
+                        >
+                          <span className="flex-1 truncate">{entry.mod.name}</span>
+                          <span className={`shrink-0 ${pct === 100 ? 'text-green-400' : isSelected ? 'text-blue-200' : 'text-gray-600'}`}>
+                            {pct}%
+                          </span>
+                        </button>
+                      );
+                    }
+
+                    // Group entry
+                    const groupKey = `${category}::${entry.name}`;
+                    const open = isGroupOpen(groupKey, entry.mods);
+                    const pct = groupProgress(entry.mods, overrides);
+
                     return (
-                      <button
-                        key={mod.id}
-                        onClick={() => { onSelectModule(mod.id); onSelectCategory(category); onViewChange('tracker'); }}
-                        className={`w-full text-left px-4 py-1.5 flex items-center gap-2 rounded-lg mx-1 transition-colors text-xs ${
-                          isSelected
-                            ? 'bg-blue-600 text-white'
-                            : 'text-gray-400 hover:text-white hover:bg-gray-800'
-                        }`}
-                      >
-                        <span className="flex-1 truncate">{mod.name}</span>
-                        <span className={`shrink-0 ${pct === 100 ? 'text-green-400' : isSelected ? 'text-blue-200' : 'text-gray-600'}`}>
-                          {pct}%
-                        </span>
-                      </button>
+                      <div key={entry.name}>
+                        {/* Group header */}
+                        <button
+                          onClick={() => toggleGroup(groupKey, entry.mods)}
+                          className="w-full text-left px-4 py-1.5 flex items-center gap-2 rounded-lg mx-1 transition-colors text-xs text-gray-400 hover:text-white hover:bg-gray-800"
+                        >
+                          <svg
+                            className={`w-2.5 h-2.5 shrink-0 transition-transform ${open ? 'rotate-90' : ''}`}
+                            viewBox="0 0 6 10" fill="none"
+                          >
+                            <path d="M1 1l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                          <span className="flex-1 truncate font-medium">{entry.name}</span>
+                          <span className={`shrink-0 ${pct === 100 ? 'text-green-400' : 'text-gray-600'}`}>{pct}%</span>
+                        </button>
+
+                        {/* Group modules */}
+                        {open && (
+                          <div className="ml-3">
+                            {entry.mods.map((mod) => {
+                              const modPct = computeModuleProgress(mod, overrides);
+                              const isSelected = mod.id === selectedModuleId;
+                              const { displayName } = parseGroup(mod.name);
+                              return (
+                                <button
+                                  key={mod.id}
+                                  onClick={() => { onSelectModule(mod.id); onSelectCategory(category); onViewChange('tracker'); }}
+                                  className={`w-full text-left px-4 py-1.5 flex items-center gap-2 rounded-lg mx-1 transition-colors text-xs ${
+                                    isSelected ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                                  }`}
+                                >
+                                  <span className="flex-1 truncate">{displayName}</span>
+                                  <span className={`shrink-0 ${modPct === 100 ? 'text-green-400' : isSelected ? 'text-blue-200' : 'text-gray-600'}`}>
+                                    {modPct}%
+                                  </span>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
                     );
                   })}
                 </div>

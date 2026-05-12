@@ -12,7 +12,7 @@ interface Filters {
 }
 
 export default function App() {
-  const { modules, overrides, saveStatus, loaded, updateItem } = useTracker();
+  const { modules, overrides, saveStatus, loaded, updateItem, updateItemName, addItem, bakeState } = useTracker();
   const [activeView, setActiveView] = useState<ActiveView>('tracker');
   const [selectedModuleId, setSelectedModuleId] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -70,7 +70,7 @@ export default function App() {
       />
 
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <Header modules={modules} overrides={overrides} saveStatus={saveStatus} />
+        <Header modules={modules} overrides={overrides} saveStatus={saveStatus} onBakeState={bakeState} />
 
         <div className="shrink-0 px-6 py-3 border-b border-gray-200 bg-white">
           <h2 className="text-base font-semibold text-gray-800">{pageTitle}</h2>
@@ -88,6 +88,8 @@ export default function App() {
                 selectedModuleId={selectedModuleId}
                 filters={filters}
                 onUpdate={updateItem}
+                onUpdateName={updateItemName}
+                onAddItem={addItem}
               />
             </main>
           </>

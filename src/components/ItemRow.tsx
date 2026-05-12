@@ -9,6 +9,7 @@ interface EffectiveItem extends Item {
 interface Props {
   item: EffectiveItem;
   onUpdate: (changes: Partial<OverrideItem>) => void;
+  onUpdateName?: (name: string) => void;
 }
 
 const STATUS_OPTIONS: { value: ItemStatus; label: string; dot: string; text: string }[] = [
@@ -75,11 +76,59 @@ function StatusButton({ status, onChange }: { status: ItemStatus; onChange: (s: 
   );
 }
 
-export function ItemRow({ item, onUpdate }: Props) {
+function NotesDisplay({ text, onEdit }: { text: string; onEdit: () => void }) {
+  if (!text) {
+    return (
+      <button
+        onClick={onEdit}
+        className="text-xs text-left w-full rounded px-0.5 -mx-0.5 text-gray-300 hover:text-gray-400 opacity-0 group-hover:opacity-100 transition-colors"
+      >
+        + Agregar nota
+      </button>
+    );
+  }
+
+  const parts = text.split(/(https?:\/\/[^\s]+)/g);
+  return (
+    <div
+      onClick={onEdit}
+      className="text-xs text-left w-full rounded px-0.5 -mx-0.5 text-gray-500 hover:text-gray-700 cursor-text transition-colors break-words"
+    >
+      {parts.map((part, i) =>
+        /^https?:\/\//.test(part) ? (
+          <a
+            key={i}
+            href={part}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="text-blue-500 hover:underline"
+          >
+            {part}
+          </a>
+        ) : (
+          part
+        ),
+      )}
+    </div>
+  );
+}
+
+export function ItemRow({ item, onUpdate, onUpdateName }: Props) {
+  const isDev = import.meta.env.DEV;
+  const [editingName, setEditingName] = useState(isDev && item.name === '');
   const [editingOwner, setEditingOwner] = useState(false);
   const [editingNotes, setEditingNotes] = useState(false);
+  const [nameDraft, setNameDraft] = useState(item.name);
   const [ownerDraft, setOwnerDraft] = useState(item.owner);
   const [notesDraft, setNotesDraft] = useState(item.notes);
+
+  function commitName() {
+    const trimmed = nameDraft.trim();
+    setEditingName(false);
+    if (trimmed && trimmed !== item.name) onUpdateName?.(trimmed);
+    else setNameDraft(item.name);
+  }
 
   function commitOwner() {
     setEditingOwner(false);
@@ -96,7 +145,7 @@ export function ItemRow({ item, onUpdate }: Props) {
 
   return (
     <div
-      className={`group flex items-start gap-3 px-4 py-3 border-b border-gray-100 last:border-0 transition-colors ${
+      className={`group flex items-start gap-3 px-4 py-3 border-b border-gray-100 last:border-0 last:rounded-b-xl transition-colors ${
         isDone ? 'bg-green-50/40' : isInProgress ? 'bg-amber-50/30' : 'hover:bg-gray-50/60'
       }`}
     >
@@ -108,11 +157,29 @@ export function ItemRow({ item, onUpdate }: Props) {
         />
       </div>
 
-      {/* Name */}
+      {/* Name + Notes */}
       <div className="flex-1 min-w-0">
-        <p className={`text-sm leading-snug ${isDone ? 'line-through text-gray-400' : isInProgress ? 'text-gray-700' : 'text-gray-800'}`}>
-          {item.name}
-        </p>
+        {isDev && editingName ? (
+          <input
+            autoFocus
+            value={nameDraft}
+            onChange={(e) => setNameDraft(e.target.value)}
+            onBlur={commitName}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') commitName();
+              if (e.key === 'Escape') { setEditingName(false); setNameDraft(item.name); }
+            }}
+            placeholder="Nombre del item..."
+            className="w-full text-sm bg-white border border-blue-300 rounded px-2 py-0.5 focus:outline-none focus:ring-1 focus:ring-blue-400"
+          />
+        ) : (
+          <p
+            onClick={() => isDev && onUpdateName && (setNameDraft(item.name), setEditingName(true))}
+            className={`text-sm leading-snug ${isDone ? 'line-through text-gray-400' : isInProgress ? 'text-gray-700' : 'text-gray-800'} ${isDev && onUpdateName ? 'cursor-text' : ''}`}
+          >
+            {item.name || <span className="text-gray-300 italic">Sin nombre</span>}
+          </p>
+        )}
 
         {/* Notes */}
         <div className="mt-1">
@@ -128,16 +195,10 @@ export function ItemRow({ item, onUpdate }: Props) {
               className="w-full text-xs text-gray-600 bg-white border border-blue-300 rounded px-2 py-1 resize-none focus:outline-none focus:ring-1 focus:ring-blue-400"
             />
           ) : (
-            <button
-              onClick={() => { setNotesDraft(item.notes); setEditingNotes(true); }}
-              className={`text-xs text-left w-full rounded px-0.5 -mx-0.5 transition-colors ${
-                item.notes
-                  ? 'text-gray-500 hover:text-gray-700'
-                  : 'text-gray-300 hover:text-gray-400 opacity-0 group-hover:opacity-100'
-              }`}
-            >
-              {item.notes || '+ Agregar nota'}
-            </button>
+            <NotesDisplay
+              text={item.notes}
+              onEdit={() => { setNotesDraft(item.notes); setEditingNotes(true); }}
+            />
           )}
         </div>
       </div>
