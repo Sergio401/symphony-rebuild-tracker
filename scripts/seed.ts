@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { db } from '../db/index';
+import { getDb } from '../db/index';
 import { modules as modulesTable, items as itemsTable } from '../db/schema';
 
 const modulesPath = join(process.cwd(), 'src/data/modules.json');
@@ -23,6 +23,7 @@ const data = JSON.parse(readFileSync(modulesPath, 'utf-8')) as {
 };
 
 async function seed() {
+  const db = getDb();
   console.log('Clearing existing data...');
   await db.delete(itemsTable);
   await db.delete(modulesTable);

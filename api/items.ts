@@ -1,10 +1,11 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { db } from '../db/index';
+import { getDb } from '../db/index';
 import { items } from '../db/schema';
 import { eq } from 'drizzle-orm';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method === 'POST') {
+    const db = getDb();
     const {
       moduleId,
       name = '',

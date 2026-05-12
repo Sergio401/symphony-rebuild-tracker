@@ -1,10 +1,11 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { db } from '../../db/index';
+import { getDb } from '../../db/index';
 import { items } from '../../db/schema';
 import { eq } from 'drizzle-orm';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const { id } = req.query as { id: string };
+  const db = getDb();
 
   if (req.method === 'PATCH') {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

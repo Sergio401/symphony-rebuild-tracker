@@ -1,10 +1,11 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { db } from '../db/index';
+import { getDb } from '../db/index';
 import { modules, items } from '../db/schema';
 import { asc, eq } from 'drizzle-orm';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
+    const db = getDb();
   if (req.method === 'GET') {
     const allModules = await db.select().from(modules).orderBy(asc(modules.position));
     const allItems = await db.select().from(items).orderBy(asc(items.position));
