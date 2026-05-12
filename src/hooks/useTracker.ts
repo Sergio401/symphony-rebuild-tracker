@@ -68,7 +68,7 @@ export function useTracker() {
 
     markSaving();
     const { done: _done, ...apiChanges } = changes;
-    fetch(`/api/items/${itemId}`, {
+    fetch(`/api/items?id=${itemId}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(apiChanges),
@@ -104,7 +104,7 @@ export function useTracker() {
         items: mod.items.filter((i) => i.id !== itemId),
       })),
     );
-    fetch(`/api/items/${itemId}`, { method: 'DELETE' }).catch(markError);
+    fetch(`/api/items?id=${itemId}`, { method: 'DELETE' }).catch(markError);
   }, []);
 
   return { modules, saveStatus, loaded, updateItem, updateItemName, addItem, deleteItem };

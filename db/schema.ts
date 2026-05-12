@@ -9,9 +9,7 @@ export const modules = pgTable('modules', {
 
 export const items = pgTable('items', {
   id: text('id').primaryKey(),
-  moduleId: text('module_id')
-    .notNull()
-    .references(() => modules.id, { onDelete: 'cascade' }),
+  moduleId: text('module_id').notNull().references(() => modules.id, { onDelete: 'cascade' }),
   name: text('name').notNull().default(''),
   complexity: integer('complexity').notNull().default(2),
   status: text('status').notNull().default('pending'),
