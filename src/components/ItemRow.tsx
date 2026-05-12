@@ -111,16 +111,28 @@ function NotesDisplay({ text, onEdit }: { text: string; onEdit: () => void }) {
   );
 }
 
+function extractGithubLabel(url: string): string {
+  const match = url.match(/\/pull\/(\d+)/i);
+  return match ? `#${match[1]}` : 'PR';
+}
+
+function extractJiraLabel(url: string): string {
+  const match = url.match(/\/browse\/([A-Z]+-\d+)/i);
+  return match ? match[1].toUpperCase() : 'Ticket';
+}
+
 function LinkButton({
   url,
   onSave,
   icon,
   label,
+  extractLabel,
 }: {
   url: string;
   onSave: (u: string) => void;
   icon: ReactNode;
   label: string;
+  extractLabel: (url: string) => string;
 }) {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(url);
@@ -143,22 +155,23 @@ function LinkButton({
           if (e.key === 'Escape') { setEditing(false); setDraft(url); }
         }}
         placeholder="https://..."
-        className="w-36 text-xs border border-blue-300 rounded px-1.5 py-0.5 focus:outline-none focus:ring-1 focus:ring-blue-400"
+        className="w-44 text-xs border border-blue-300 rounded px-1.5 py-0.5 focus:outline-none focus:ring-1 focus:ring-blue-400"
       />
     );
   }
 
   if (url) {
     return (
-      <div className="relative group/link flex items-center gap-0.5">
+      <div className="group/link flex items-center gap-1">
         <a
           href={url}
           target="_blank"
           rel="noopener noreferrer"
-          title={label}
-          className="text-blue-500 hover:text-blue-700 transition-colors"
+          title={url}
+          className="flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 rounded px-1.5 py-0.5 transition-colors"
         >
           {icon}
+          <span>{extractLabel(url)}</span>
         </a>
         <button
           onClick={() => { setDraft(url); setEditing(true); }}
@@ -185,13 +198,13 @@ function LinkButton({
 }
 
 const GithubIcon = () => (
-  <svg className="w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
+  <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 16 16" fill="currentColor">
     <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
   </svg>
 );
 
 const JiraIcon = () => (
-  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+  <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
     <path d="M11.571 11.429 6.286 6.143a.857.857 0 0 0-1.214 0L.286 10.929a.857.857 0 0 0 0 1.214l5.286 5.286a.857.857 0 0 0 1.214 0l4.786-4.786a.857.857 0 0 0 0-1.214zm6.857-6.857-4.785 4.785a.857.857 0 0 0 0 1.214l4.785 4.786a.857.857 0 0 0 1.215 0l4.786-4.786a.857.857 0 0 0 0-1.214l-4.786-4.785a.857.857 0 0 0-1.215 0z"/>
   </svg>
 );
@@ -288,18 +301,20 @@ export function ItemRow({ item, onUpdate, onUpdateName, onDelete }: Props) {
         />
       </div>
 
-      <div className="shrink-0 flex items-center gap-1.5 pt-0.5">
+      <div className="shrink-0 flex items-center gap-2 pt-0.5 min-w-[180px]">
         <LinkButton
           url={item.githubUrl}
           onSave={(u) => onUpdate({ githubUrl: u })}
           icon={<GithubIcon />}
           label="GitHub PR"
+          extractLabel={extractGithubLabel}
         />
         <LinkButton
           url={item.jiraUrl}
           onSave={(u) => onUpdate({ jiraUrl: u })}
           icon={<JiraIcon />}
           label="Jira ticket"
+          extractLabel={extractJiraLabel}
         />
       </div>
 
