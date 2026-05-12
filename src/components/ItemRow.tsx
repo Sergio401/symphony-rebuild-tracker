@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, type ReactNode } from 'react';
 import { ComplexityBadge } from './ComplexityBadge';
 import type { Item, Complexity, ItemUpdate, ItemStatus } from '../types';
 
@@ -111,6 +111,91 @@ function NotesDisplay({ text, onEdit }: { text: string; onEdit: () => void }) {
   );
 }
 
+function LinkButton({
+  url,
+  onSave,
+  icon,
+  label,
+}: {
+  url: string;
+  onSave: (u: string) => void;
+  icon: ReactNode;
+  label: string;
+}) {
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(url);
+
+  function commit() {
+    setEditing(false);
+    const trimmed = draft.trim();
+    if (trimmed !== url) onSave(trimmed);
+  }
+
+  if (editing) {
+    return (
+      <input
+        autoFocus
+        value={draft}
+        onChange={(e) => setDraft(e.target.value)}
+        onBlur={commit}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') commit();
+          if (e.key === 'Escape') { setEditing(false); setDraft(url); }
+        }}
+        placeholder="https://..."
+        className="w-36 text-xs border border-blue-300 rounded px-1.5 py-0.5 focus:outline-none focus:ring-1 focus:ring-blue-400"
+      />
+    );
+  }
+
+  if (url) {
+    return (
+      <div className="relative group/link flex items-center gap-0.5">
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          title={label}
+          className="text-blue-500 hover:text-blue-700 transition-colors"
+        >
+          {icon}
+        </a>
+        <button
+          onClick={() => { setDraft(url); setEditing(true); }}
+          title={`Editar ${label}`}
+          className="opacity-0 group-hover/link:opacity-100 transition-opacity text-gray-300 hover:text-gray-500"
+        >
+          <svg className="w-3 h-3" viewBox="0 0 12 12" fill="none">
+            <path d="M8.5 1.5a1.5 1.5 0 0 1 2 2L4 10 1 11l1-3 6.5-6.5z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <button
+      onClick={() => { setDraft(''); setEditing(true); }}
+      title={`Agregar ${label}`}
+      className="opacity-0 group-hover:opacity-100 transition-opacity text-gray-300 hover:text-gray-400"
+    >
+      {icon}
+    </button>
+  );
+}
+
+const GithubIcon = () => (
+  <svg className="w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
+    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+  </svg>
+);
+
+const JiraIcon = () => (
+  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M11.571 11.429 6.286 6.143a.857.857 0 0 0-1.214 0L.286 10.929a.857.857 0 0 0 0 1.214l5.286 5.286a.857.857 0 0 0 1.214 0l4.786-4.786a.857.857 0 0 0 0-1.214zm6.857-6.857-4.785 4.785a.857.857 0 0 0 0 1.214l4.785 4.786a.857.857 0 0 0 1.215 0l4.786-4.786a.857.857 0 0 0 0-1.214l-4.786-4.785a.857.857 0 0 0-1.215 0z"/>
+  </svg>
+);
+
 export function ItemRow({ item, onUpdate, onUpdateName, onDelete }: Props) {
   const [editingName, setEditingName] = useState(item.name === '' && !!onUpdateName);
   const [editingOwner, setEditingOwner] = useState(false);
@@ -200,6 +285,21 @@ export function ItemRow({ item, onUpdate, onUpdateName, onDelete }: Props) {
         <ComplexityBadge
           value={item.complexity as Complexity}
           onChange={(v) => onUpdate({ complexity: v })}
+        />
+      </div>
+
+      <div className="shrink-0 flex items-center gap-1.5 pt-0.5">
+        <LinkButton
+          url={item.githubUrl}
+          onSave={(u) => onUpdate({ githubUrl: u })}
+          icon={<GithubIcon />}
+          label="GitHub PR"
+        />
+        <LinkButton
+          url={item.jiraUrl}
+          onSave={(u) => onUpdate({ jiraUrl: u })}
+          icon={<JiraIcon />}
+          label="Jira ticket"
         />
       </div>
 

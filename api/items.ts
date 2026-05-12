@@ -20,6 +20,8 @@ const itemsTable = pgTable('items', {
   status: text('status').notNull().default('pending'),
   owner: text('owner').notNull().default(''),
   notes: text('notes').notNull().default(''),
+  githubUrl: text('github_url').notNull().default(''),
+  jiraUrl: text('jira_url').notNull().default(''),
   position: integer('position').notNull().default(0),
 });
 
@@ -61,6 +63,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         done: false,
         owner: '',
         notes: '',
+        githubUrl: '',
+        jiraUrl: '',
       });
     }
 
@@ -69,7 +73,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const id = req.query.id as string;
       if (!id) return res.status(400).json({ error: 'id query param required' });
 
-      const allowed = ['name', 'status', 'owner', 'notes', 'complexity'] as const;
+      const allowed = ['name', 'status', 'owner', 'notes', 'complexity', 'githubUrl', 'jiraUrl'] as const;
       type AllowedKey = (typeof allowed)[number];
       const body = req.body as Record<string, unknown>;
       const changes: Partial<Record<AllowedKey, string | number>> = {};

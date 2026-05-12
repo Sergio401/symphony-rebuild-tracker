@@ -15,5 +15,7 @@ export const items = pgTable('items', {
   status: text('status').notNull().default('pending'),
   owner: text('owner').notNull().default(''),
   notes: text('notes').notNull().default(''),
+  githubUrl: text('github_url').notNull().default(''),
+  jiraUrl: text('jira_url').notNull().default(''),
   position: integer('position').notNull().default(0),
 });
