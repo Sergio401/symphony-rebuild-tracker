@@ -4,6 +4,7 @@ import { modules, items } from '../db/schema';
 import { asc, eq } from 'drizzle-orm';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  try {
   if (req.method === 'GET') {
     const allModules = await db.select().from(modules).orderBy(asc(modules.position));
     const allItems = await db.select().from(items).orderBy(asc(items.position));
@@ -34,4 +35,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   return res.status(405).json({ error: 'Method not allowed' });
+  } catch (err) {
+    return res.status(500).json({ error: String(err), stack: err instanceof Error ? err.stack : undefined });
+  }
 }
