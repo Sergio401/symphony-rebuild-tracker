@@ -1,8 +1,8 @@
 import 'dotenv/config';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { getDb } from '../db/index';
-import { modules as modulesTable, items as itemsTable } from '../db/schema';
+import { getDb } from '../api/_lib/db';
+import { modules as modulesTable, items as itemsTable } from '../api/_lib/schema';
 
 const modulesPath = join(process.cwd(), 'src/data/modules.json');
 const data = JSON.parse(readFileSync(modulesPath, 'utf-8')) as {
