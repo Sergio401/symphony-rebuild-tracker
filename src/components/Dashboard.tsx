@@ -3,7 +3,7 @@ import {
   PieChart, Pie, Legend, RadialBarChart, RadialBar,
 } from 'recharts';
 import { computeProgress, computeModuleProgress } from '../hooks/useTracker';
-import type { Module, OverrideItem, Complexity } from '../types';
+import type { Module, Complexity } from '../types';
 
 const CATEGORY_ORDER = ['Inventory', 'Workforce', 'Assurance', 'Reports', 'Admin', 'Automation', 'Fulfillment', 'Cross-cutting'];
 const CATEGORY_COLORS: Record<string, string> = {
@@ -27,7 +27,6 @@ const COMPLEXITY_LABELS: Record<number, string> = { 1: 'Trivial', 2: 'Estándar'
 
 interface Props {
   modules: Module[];
-  overrides: Record<string, OverrideItem>;
 }
 
 function StatCard({ label, value, sub, color = 'text-gray-900' }: { label: string; value: string | number; sub?: string; color?: string }) {
@@ -44,67 +43,60 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
   return <h3 className="text-sm font-semibold text-gray-700 mb-3">{children}</h3>;
 }
 
-export function Dashboard({ modules, overrides }: Props) {
-  const totalProgress = computeProgress(modules, overrides);
+export function Dashboard({ modules }: Props) {
+  const totalProgress = computeProgress(modules);
 
   const totalItems = modules.reduce((s, m) => s + m.items.length, 0);
-  const doneItems = modules.reduce((s, m) => s + m.items.filter((i) => overrides[i.id]?.done ?? i.done).length, 0);
+  const doneItems = modules.reduce((s, m) => s + m.items.filter((i) => i.done).length, 0);
   const pendingItems = totalItems - doneItems;
 
   const totalWeight = modules.reduce((s, m) =>
-    s + m.items.reduce((ss, i) => ss + ((overrides[i.id]?.complexity ?? i.complexity) as number), 0), 0);
+    s + m.items.reduce((ss, i) => ss + (i.complexity as number), 0), 0);
   const doneWeight = modules.reduce((s, m) =>
-    s + m.items.filter((i) => overrides[i.id]?.done ?? i.done)
-      .reduce((ss, i) => ss + ((overrides[i.id]?.complexity ?? i.complexity) as number), 0), 0);
+    s + m.items.filter((i) => i.done).reduce((ss, i) => ss + (i.complexity as number), 0), 0);
 
-  // --- Category data ---
   const categoryData = CATEGORY_ORDER.map((cat) => {
     const mods = modules.filter((m) => m.category === cat);
-    const catTotal = mods.reduce((s, m) => s + m.items.reduce((ss, i) => ss + ((overrides[i.id]?.complexity ?? i.complexity) as number), 0), 0);
-    const catDone = mods.reduce((s, m) => s + m.items.filter((i) => overrides[i.id]?.done ?? i.done)
-      .reduce((ss, i) => ss + ((overrides[i.id]?.complexity ?? i.complexity) as number), 0), 0);
+    const catTotal = mods.reduce((s, m) => s + m.items.reduce((ss, i) => ss + (i.complexity as number), 0), 0);
+    const catDone = mods.reduce((s, m) => s + m.items.filter((i) => i.done).reduce((ss, i) => ss + (i.complexity as number), 0), 0);
     const pct = catTotal > 0 ? Math.round((catDone / catTotal) * 100) : 0;
     const items = mods.reduce((s, m) => s + m.items.length, 0);
-    const done = mods.reduce((s, m) => s + m.items.filter((i) => overrides[i.id]?.done ?? i.done).length, 0);
+    const done = mods.reduce((s, m) => s + m.items.filter((i) => i.done).length, 0);
     return { name: cat, pct, items, done, color: CATEGORY_COLORS[cat] };
   });
 
-  // --- Module data (for long bar chart) ---
   const moduleData = modules
     .map((mod) => ({
       name: mod.name.length > 28 ? mod.name.slice(0, 26) + '…' : mod.name,
       fullName: mod.name,
       category: mod.category,
-      pct: computeModuleProgress(mod, overrides),
+      pct: computeModuleProgress(mod),
       color: CATEGORY_COLORS[mod.category] ?? '#94a3b8',
     }))
     .sort((a, b) => b.pct - a.pct);
 
-  // --- Complexity breakdown ---
   const complexityData = ([1, 2, 3, 5, 8] as Complexity[]).map((c) => {
-    const all = modules.flatMap((m) => m.items).filter((i) => (overrides[i.id]?.complexity ?? i.complexity) === c);
-    const done = all.filter((i) => overrides[i.id]?.done ?? i.done).length;
+    const all = modules.flatMap((m) => m.items).filter((i) => i.complexity === c);
+    const done = all.filter((i) => i.done).length;
     return { name: COMPLEXITY_LABELS[c], value: c, done, pending: all.length - done, total: all.length, color: COMPLEXITY_COLORS[c] };
   });
 
-  // --- Pie chart: done vs pending by weight ---
   const pieData = [
     { name: 'Completado', value: doneWeight, fill: '#3b82f6' },
     { name: 'Pendiente', value: totalWeight - doneWeight, fill: '#e5e7eb' },
   ];
 
-  // --- Radial: category completion ---
   const radialData = categoryData
     .filter((c) => c.items > 0)
     .map((c) => ({ name: c.name, value: c.pct, fill: c.color }))
     .sort((a, b) => b.value - a.value);
 
-  const CustomTooltipBar = ({ active, payload, label }: any) => {
+  const CustomTooltipBar = ({ active, payload, label }: { active?: boolean; payload?: { dataKey: string; fill: string; name: string; value: number }[]; label?: string }) => {
     if (!active || !payload?.length) return null;
     return (
       <div className="bg-white border border-gray-200 rounded-lg shadow-lg px-3 py-2 text-xs">
         <p className="font-semibold text-gray-700 mb-1">{label}</p>
-        {payload.map((p: any) => (
+        {payload.map((p) => (
           <p key={p.dataKey} style={{ color: p.fill === '#e5e7eb' ? '#9ca3af' : p.fill }}>
             {p.name}: {p.value}
           </p>
@@ -115,20 +107,18 @@ export function Dashboard({ modules, overrides }: Props) {
 
   return (
     <div className="flex-1 overflow-y-auto px-6 py-5">
-      {/* Stat cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         <StatCard label="Progreso global (ponderado)" value={`${totalProgress}%`} color="text-blue-600" />
         <StatCard label="Ítems completados" value={`${doneItems}/${totalItems}`} sub={`${pendingItems} pendientes`} />
         <StatCard label="Puntos completados" value={`${doneWeight}`} sub={`de ${totalWeight} pts de complejidad`} />
         <StatCard
           label="Módulos 100% terminados"
-          value={modules.filter((m) => computeModuleProgress(m, overrides) === 100).length}
+          value={modules.filter((m) => computeModuleProgress(m) === 100).length}
           sub={`de ${modules.length} módulos`}
         />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
-        {/* Donut: done vs pending */}
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
           <SectionTitle>Distribución global de trabajo</SectionTitle>
           <div className="flex items-center gap-6">
@@ -167,14 +157,13 @@ export function Dashboard({ modules, overrides }: Props) {
               </div>
               <div className="border-t border-gray-100 pt-2 mt-1">
                 <p className="text-xs text-gray-400">
-                  {doneItems} de {totalItems} ítems · {modules.filter((m) => computeModuleProgress(m, overrides) === 100).length} módulos completos
+                  {doneItems} de {totalItems} ítems · {modules.filter((m) => computeModuleProgress(m) === 100).length} módulos completos
                 </p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Radial: category completion */}
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
           <SectionTitle>Progreso por categoría</SectionTitle>
           <ResponsiveContainer width="100%" height={180}>
@@ -199,9 +188,9 @@ export function Dashboard({ modules, overrides }: Props) {
                 layout="vertical"
                 verticalAlign="middle"
                 align="right"
-                formatter={(value, entry: any) => (
+                formatter={(value, entry: { payload?: { fill?: string; value?: number } }) => (
                   <span style={{ color: '#374151', fontSize: 11 }}>
-                    {value} <span style={{ color: entry.payload.fill, fontWeight: 600 }}>{entry.payload.value}%</span>
+                    {value} <span style={{ color: entry.payload?.fill, fontWeight: 600 }}>{entry.payload?.value}%</span>
                   </span>
                 )}
               />
@@ -210,7 +199,6 @@ export function Dashboard({ modules, overrides }: Props) {
         </div>
       </div>
 
-      {/* Category bar chart */}
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 mb-5">
         <SectionTitle>Progreso por categoría — detalle</SectionTitle>
         <div className="space-y-3">
@@ -235,7 +223,6 @@ export function Dashboard({ modules, overrides }: Props) {
         </div>
       </div>
 
-      {/* Complexity breakdown */}
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 mb-5">
         <SectionTitle>Ítems por nivel de complejidad</SectionTitle>
         <ResponsiveContainer width="100%" height={180}>
@@ -249,8 +236,8 @@ export function Dashboard({ modules, overrides }: Props) {
               ))}
             </Bar>
             <Bar dataKey="pending" name="Pendientes" stackId="a" radius={[4, 4, 0, 0]}>
-              {complexityData.map(() => (
-                <Cell key="p" fill="#e5e7eb" />
+              {complexityData.map((entry) => (
+                <Cell key={entry.name} fill="#e5e7eb" />
               ))}
             </Bar>
           </BarChart>
@@ -265,7 +252,6 @@ export function Dashboard({ modules, overrides }: Props) {
         </div>
       </div>
 
-      {/* Module breakdown — full list sorted by % */}
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
         <SectionTitle>Todos los módulos — ranking de completitud</SectionTitle>
         <div className="space-y-2 max-h-[480px] overflow-y-auto pr-1">

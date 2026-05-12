@@ -1,6 +1,6 @@
 import { ItemRow } from './ItemRow';
-import { getEffectiveItem, computeModuleProgress } from '../hooks/useTracker';
-import type { Module, OverrideItem } from '../types';
+import { computeModuleProgress } from '../hooks/useTracker';
+import type { Module, ItemUpdate } from '../types';
 
 interface Filters {
   status: 'all' | 'done' | 'pending' | 'in-progress';
@@ -9,17 +9,15 @@ interface Filters {
 
 interface Props {
   modules: Module[];
-  overrides: Record<string, OverrideItem>;
   selectedModuleId: string | null;
   filters: Filters;
-  onUpdate: (itemId: string, changes: Partial<OverrideItem>) => void;
+  onUpdate: (itemId: string, changes: ItemUpdate & { done?: boolean }) => void;
   onUpdateName?: (itemId: string, name: string) => void;
   onAddItem?: (moduleId: string) => void;
+  onDeleteItem?: (itemId: string) => void;
 }
 
-export function ItemList({ modules, overrides, selectedModuleId, filters, onUpdate, onUpdateName, onAddItem }: Props) {
-  const isDev = import.meta.env.DEV;
-
+export function ItemList({ modules, selectedModuleId, filters, onUpdate, onUpdateName, onAddItem, onDeleteItem }: Props) {
   const visibleModules = selectedModuleId
     ? modules.filter((m) => m.id === selectedModuleId)
     : modules;
@@ -27,15 +25,13 @@ export function ItemList({ modules, overrides, selectedModuleId, filters, onUpda
   const filtered = visibleModules
     .map((mod) => ({
       ...mod,
-      items: mod.items
-        .map((item) => getEffectiveItem(mod, item.id, overrides))
-        .filter((item) => {
-          if (filters.status !== 'all' && item.status !== filters.status) return false;
-          if (filters.owner && !item.owner.toLowerCase().includes(filters.owner.toLowerCase())) return false;
-          return true;
-        }),
+      items: mod.items.filter((item) => {
+        if (filters.status !== 'all' && item.status !== filters.status) return false;
+        if (filters.owner && !item.owner.toLowerCase().includes(filters.owner.toLowerCase())) return false;
+        return true;
+      }),
     }))
-    .filter((mod) => mod.items.length > 0);
+    .filter((mod) => mod.items.length > 0 || !filters.status && !filters.owner);
 
   if (filtered.length === 0) {
     return (
@@ -49,12 +45,11 @@ export function ItemList({ modules, overrides, selectedModuleId, filters, onUpda
   return (
     <div className="space-y-4">
       {filtered.map((mod) => {
-        const progress = computeModuleProgress(mod as Module, overrides);
+        const progress = computeModuleProgress(mod);
         const doneCount = mod.items.filter((i) => i.done).length;
 
         return (
           <div key={mod.id} className="bg-white rounded-xl border border-gray-200 shadow-sm">
-            {/* Module header */}
             <div className="px-4 py-3 bg-gray-50 border-b border-gray-100 rounded-t-xl flex items-center justify-between gap-4">
               <div className="flex-1 min-w-0">
                 <h3 className="text-sm font-semibold text-gray-800 truncate">{mod.name}</h3>
@@ -74,17 +69,17 @@ export function ItemList({ modules, overrides, selectedModuleId, filters, onUpda
               </div>
             </div>
 
-            {/* Items */}
             <div>
               {mod.items.map((item) => (
                 <ItemRow
                   key={item.id}
                   item={item}
                   onUpdate={(changes) => onUpdate(item.id, changes)}
-                  onUpdateName={isDev && onUpdateName ? (name) => onUpdateName(item.id, name) : undefined}
+                  onUpdateName={onUpdateName ? (name) => onUpdateName(item.id, name) : undefined}
+                  onDelete={onDeleteItem ? () => onDeleteItem(item.id) : undefined}
                 />
               ))}
-              {isDev && onAddItem && (
+              {onAddItem && (
                 <button
                   onClick={() => onAddItem(mod.id)}
                   className="w-full flex items-center gap-2 px-4 py-2 text-xs text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-colors rounded-b-xl"

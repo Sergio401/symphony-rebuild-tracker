@@ -1,15 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
 import { ComplexityBadge } from './ComplexityBadge';
-import type { Item, Complexity, OverrideItem, ItemStatus } from '../types';
-
-interface EffectiveItem extends Item {
-  status: ItemStatus;
-}
+import type { Item, Complexity, ItemUpdate, ItemStatus } from '../types';
 
 interface Props {
-  item: EffectiveItem;
-  onUpdate: (changes: Partial<OverrideItem>) => void;
+  item: Item;
+  onUpdate: (changes: ItemUpdate & { done?: boolean }) => void;
   onUpdateName?: (name: string) => void;
+  onDelete?: () => void;
 }
 
 const STATUS_OPTIONS: { value: ItemStatus; label: string; dot: string; text: string }[] = [
@@ -114,9 +111,8 @@ function NotesDisplay({ text, onEdit }: { text: string; onEdit: () => void }) {
   );
 }
 
-export function ItemRow({ item, onUpdate, onUpdateName }: Props) {
-  const isDev = import.meta.env.DEV;
-  const [editingName, setEditingName] = useState(isDev && item.name === '');
+export function ItemRow({ item, onUpdate, onUpdateName, onDelete }: Props) {
+  const [editingName, setEditingName] = useState(item.name === '' && !!onUpdateName);
   const [editingOwner, setEditingOwner] = useState(false);
   const [editingNotes, setEditingNotes] = useState(false);
   const [nameDraft, setNameDraft] = useState(item.name);
@@ -149,7 +145,6 @@ export function ItemRow({ item, onUpdate, onUpdateName }: Props) {
         isDone ? 'bg-green-50/40' : isInProgress ? 'bg-amber-50/30' : 'hover:bg-gray-50/60'
       }`}
     >
-      {/* Status button */}
       <div className="pt-0.5 shrink-0">
         <StatusButton
           status={item.status}
@@ -157,9 +152,8 @@ export function ItemRow({ item, onUpdate, onUpdateName }: Props) {
         />
       </div>
 
-      {/* Name + Notes */}
       <div className="flex-1 min-w-0">
-        {isDev && editingName ? (
+        {editingName ? (
           <input
             autoFocus
             value={nameDraft}
@@ -174,14 +168,13 @@ export function ItemRow({ item, onUpdate, onUpdateName }: Props) {
           />
         ) : (
           <p
-            onClick={() => isDev && onUpdateName && (setNameDraft(item.name), setEditingName(true))}
-            className={`text-sm leading-snug ${isDone ? 'line-through text-gray-400' : isInProgress ? 'text-gray-700' : 'text-gray-800'} ${isDev && onUpdateName ? 'cursor-text' : ''}`}
+            onClick={() => onUpdateName && (setNameDraft(item.name), setEditingName(true))}
+            className={`text-sm leading-snug ${isDone ? 'line-through text-gray-400' : isInProgress ? 'text-gray-700' : 'text-gray-800'} ${onUpdateName ? 'cursor-text' : ''}`}
           >
             {item.name || <span className="text-gray-300 italic">Sin nombre</span>}
           </p>
         )}
 
-        {/* Notes */}
         <div className="mt-1">
           {editingNotes ? (
             <textarea
@@ -203,7 +196,6 @@ export function ItemRow({ item, onUpdate, onUpdateName }: Props) {
         </div>
       </div>
 
-      {/* Complexity badge */}
       <div className="shrink-0 pt-0.5">
         <ComplexityBadge
           value={item.complexity as Complexity}
@@ -211,7 +203,6 @@ export function ItemRow({ item, onUpdate, onUpdateName }: Props) {
         />
       </div>
 
-      {/* Owner */}
       <div className="shrink-0 w-28">
         {editingOwner ? (
           <input
@@ -236,6 +227,18 @@ export function ItemRow({ item, onUpdate, onUpdateName }: Props) {
           </button>
         )}
       </div>
+
+      {onDelete && (
+        <button
+          onClick={onDelete}
+          title="Eliminar item"
+          className="shrink-0 pt-0.5 opacity-0 group-hover:opacity-100 transition-opacity text-gray-300 hover:text-red-400"
+        >
+          <svg className="w-4 h-4" viewBox="0 0 16 16" fill="none">
+            <path d="M2 4h12M5 4V2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5V4M6 7v5M10 7v5M3 4l.8 8.5a.5.5 0 0 0 .5.5h7.4a.5.5 0 0 0 .5-.5L13 4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
+      )}
     </div>
   );
 }

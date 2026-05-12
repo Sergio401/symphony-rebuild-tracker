@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { useTracker, getEffectiveItem } from './hooks/useTracker';
+import { useTracker } from './hooks/useTracker';
 import { Sidebar, type ActiveView } from './components/Sidebar';
 import { Header } from './components/Header';
 import { FilterBar } from './components/FilterBar';
@@ -12,7 +12,7 @@ interface Filters {
 }
 
 export default function App() {
-  const { modules, overrides, saveStatus, loaded, updateItem, updateItemName, addItem, bakeState } = useTracker();
+  const { modules, saveStatus, loaded, updateItem, updateItemName, addItem, deleteItem } = useTracker();
   const [activeView, setActiveView] = useState<ActiveView>('tracker');
   const [selectedModuleId, setSelectedModuleId] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -27,13 +27,12 @@ export default function App() {
   const resultCount = useMemo(() => {
     return visibleModules.reduce((s, mod) => {
       return s + mod.items.filter((item) => {
-        const effective = getEffectiveItem(mod, item.id, overrides);
-        if (filters.status !== 'all' && effective.status !== filters.status) return false;
-        if (filters.owner && !effective.owner.toLowerCase().includes(filters.owner.toLowerCase())) return false;
+        if (filters.status !== 'all' && item.status !== filters.status) return false;
+        if (filters.owner && !item.owner.toLowerCase().includes(filters.owner.toLowerCase())) return false;
         return true;
       }).length;
     }, 0);
-  }, [visibleModules, overrides, filters]);
+  }, [visibleModules, filters]);
 
   const pageTitle = useMemo(() => {
     if (activeView === 'dashboard') return 'Dashboard';
@@ -60,7 +59,6 @@ export default function App() {
     <div className="h-screen flex bg-gray-50 overflow-hidden">
       <Sidebar
         modules={modules}
-        overrides={overrides}
         selectedModuleId={selectedModuleId}
         selectedCategory={selectedCategory}
         activeView={activeView}
@@ -70,26 +68,26 @@ export default function App() {
       />
 
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <Header modules={modules} overrides={overrides} saveStatus={saveStatus} onBakeState={bakeState} />
+        <Header modules={modules} saveStatus={saveStatus} />
 
         <div className="shrink-0 px-6 py-3 border-b border-gray-200 bg-white">
           <h2 className="text-base font-semibold text-gray-800">{pageTitle}</h2>
         </div>
 
         {activeView === 'dashboard' ? (
-          <Dashboard modules={modules} overrides={overrides} />
+          <Dashboard modules={modules} />
         ) : (
           <>
             <FilterBar filters={filters} onFiltersChange={setFilters} resultCount={resultCount} />
             <main className="flex-1 overflow-y-auto px-6 py-4">
               <ItemList
                 modules={visibleModules}
-                overrides={overrides}
                 selectedModuleId={selectedModuleId}
                 filters={filters}
                 onUpdate={updateItem}
                 onUpdateName={updateItemName}
                 onAddItem={addItem}
+                onDeleteItem={deleteItem}
               />
             </main>
           </>

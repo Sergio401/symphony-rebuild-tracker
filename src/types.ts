@@ -6,8 +6,8 @@ export interface Item {
   id: string;
   name: string;
   complexity: Complexity;
+  status: ItemStatus;
   done: boolean;
-  status?: ItemStatus;
   owner: string;
   notes: string;
 }
@@ -24,22 +24,6 @@ export interface ScaleEntry {
   description: string;
 }
 
-export interface ModulesData {
-  scale: Record<string, ScaleEntry>;
-  modules: Module[];
-}
-
-export interface OverrideItem {
-  status?: ItemStatus;
-  done?: boolean;
-  owner?: string;
-  notes?: string;
-  complexity?: Complexity;
-}
-
-export interface TrackerState {
-  overrides: Record<string, OverrideItem>;
-  lastSaved?: string;
-}
-
 export type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
+
+export type ItemUpdate = Partial<Pick<Item, 'name' | 'status' | 'owner' | 'notes' | 'complexity'>>;

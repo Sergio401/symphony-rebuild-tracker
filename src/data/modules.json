@@ -422,7 +422,7 @@
       "category": "Inventory",
       "items": [
         {
-          "id": "inv-poll-exec-list",
+          "id": "inv-poll-equip-list",
           "name": "Catálogo",
           "complexity": 2,
           "done": true,

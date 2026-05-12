@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { computeModuleProgress } from '../hooks/useTracker';
-import type { Module, OverrideItem } from '../types';
+import type { Module } from '../types';
 
 export type ActiveView = 'tracker' | 'dashboard';
 
@@ -19,7 +19,6 @@ const CATEGORY_ICONS: Record<string, string> = {
 
 interface Props {
   modules: Module[];
-  overrides: Record<string, OverrideItem>;
   selectedModuleId: string | null;
   selectedCategory: string | null;
   activeView: ActiveView;
@@ -56,21 +55,19 @@ function buildEntries(mods: Module[]): Entry[] {
   return entries;
 }
 
-function groupProgress(mods: Module[], overrides: Record<string, OverrideItem>) {
-  let total = 0, done = 0;
+function groupProgress(mods: Module[]) {
+  let total = 0;
+  let done = 0;
   for (const mod of mods) {
     for (const item of mod.items) {
-      const ov = overrides[item.id] ?? {};
-      const c = (ov.complexity ?? item.complexity) as number;
-      total += c;
-      const isDone = ov.status === 'done' || (ov.done ?? item.done);
-      if (isDone) done += c;
+      total += item.complexity as number;
+      if (item.status === 'done') done += item.complexity as number;
     }
   }
   return total > 0 ? Math.round((done / total) * 100) : 0;
 }
 
-export function Sidebar({ modules, overrides, selectedModuleId, selectedCategory, activeView, onSelectModule, onSelectCategory, onViewChange }: Props) {
+export function Sidebar({ modules, selectedModuleId, selectedCategory, activeView, onSelectModule, onSelectCategory, onViewChange }: Props) {
   const [groupStates, setGroupStates] = useState<Record<string, boolean>>({});
 
   function isGroupOpen(key: string, groupMods: Module[]) {
@@ -117,15 +114,14 @@ export function Sidebar({ modules, overrides, selectedModuleId, selectedCategory
         </button>
 
         {Object.entries(grouped).map(([category, mods]) => {
-          const catTotal = mods.reduce((s, m) => s + m.items.reduce((ss, i) => ss + ((overrides[i.id]?.complexity ?? i.complexity) as number), 0), 0);
-          const catDone = mods.reduce((s, m) => s + m.items.filter((i) => overrides[i.id]?.done ?? i.done).reduce((ss, i) => ss + ((overrides[i.id]?.complexity ?? i.complexity) as number), 0), 0);
+          const catTotal = mods.reduce((s, m) => s + m.items.reduce((ss, i) => ss + (i.complexity as number), 0), 0);
+          const catDone = mods.reduce((s, m) => s + m.items.filter((i) => i.done).reduce((ss, i) => ss + (i.complexity as number), 0), 0);
           const catPct = catTotal > 0 ? Math.round((catDone / catTotal) * 100) : 0;
           const isCatExpanded = selectedCategory === category || mods.some((m) => m.id === selectedModuleId);
           const entries = buildEntries(mods);
 
           return (
             <div key={category} className="mb-1">
-              {/* Category header */}
               <button
                 onClick={() => {
                   onSelectModule(null);
@@ -147,7 +143,7 @@ export function Sidebar({ modules, overrides, selectedModuleId, selectedCategory
                 <div className="ml-2">
                   {entries.map((entry) => {
                     if (entry.kind === 'standalone') {
-                      const pct = computeModuleProgress(entry.mod, overrides);
+                      const pct = computeModuleProgress(entry.mod);
                       const isSelected = entry.mod.id === selectedModuleId;
                       return (
                         <button
@@ -165,14 +161,12 @@ export function Sidebar({ modules, overrides, selectedModuleId, selectedCategory
                       );
                     }
 
-                    // Group entry
                     const groupKey = `${category}::${entry.name}`;
                     const open = isGroupOpen(groupKey, entry.mods);
-                    const pct = groupProgress(entry.mods, overrides);
+                    const pct = groupProgress(entry.mods);
 
                     return (
                       <div key={entry.name}>
-                        {/* Group header */}
                         <button
                           onClick={() => toggleGroup(groupKey, entry.mods)}
                           className="w-full text-left px-4 py-1.5 flex items-center gap-2 rounded-lg mx-1 transition-colors text-xs text-gray-400 hover:text-white hover:bg-gray-800"
@@ -187,11 +181,10 @@ export function Sidebar({ modules, overrides, selectedModuleId, selectedCategory
                           <span className={`shrink-0 ${pct === 100 ? 'text-green-400' : 'text-gray-600'}`}>{pct}%</span>
                         </button>
 
-                        {/* Group modules */}
                         {open && (
                           <div className="ml-3">
                             {entry.mods.map((mod) => {
-                              const modPct = computeModuleProgress(mod, overrides);
+                              const modPct = computeModuleProgress(mod);
                               const isSelected = mod.id === selectedModuleId;
                               const { displayName } = parseGroup(mod.name);
                               return (
@@ -220,11 +213,6 @@ export function Sidebar({ modules, overrides, selectedModuleId, selectedCategory
           );
         })}
       </nav>
-
-      <div className="px-4 py-3 border-t border-gray-700 text-xs text-gray-500">
-        Para agregar o quitar ítems: editar{' '}
-        <code className="text-gray-400 bg-gray-800 px-1 rounded">src/data/modules.json</code>
-      </div>
     </aside>
   );
 }
