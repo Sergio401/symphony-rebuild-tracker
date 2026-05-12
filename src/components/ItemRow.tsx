@@ -1,10 +1,78 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ComplexityBadge } from './ComplexityBadge';
-import type { Item, Complexity, OverrideItem } from '../types';
+import type { Item, Complexity, OverrideItem, ItemStatus } from '../types';
+
+interface EffectiveItem extends Item {
+  status: ItemStatus;
+}
 
 interface Props {
-  item: Item;
+  item: EffectiveItem;
   onUpdate: (changes: Partial<OverrideItem>) => void;
+}
+
+const STATUS_OPTIONS: { value: ItemStatus; label: string; dot: string; text: string }[] = [
+  { value: 'pending',     label: 'Pendiente',   dot: 'bg-gray-300',  text: 'text-gray-400' },
+  { value: 'in-progress', label: 'En progreso', dot: 'bg-amber-400', text: 'text-amber-500' },
+  { value: 'done',        label: 'Completado',  dot: 'bg-green-500', text: 'text-green-600' },
+];
+
+function StatusButton({ status, onChange }: { status: ItemStatus; onChange: (s: ItemStatus) => void }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const cfg = STATUS_OPTIONS.find((o) => o.value === status)!;
+
+  useEffect(() => {
+    if (!open) return;
+    function onDown(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener('mousedown', onDown);
+    return () => document.removeEventListener('mousedown', onDown);
+  }, [open]);
+
+  return (
+    <div ref={ref} className="relative shrink-0">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        title={cfg.label}
+        className="flex items-center justify-center w-5 h-5 rounded-full hover:ring-2 hover:ring-offset-1 hover:ring-gray-200 transition-all"
+      >
+        <span className={`w-3.5 h-3.5 rounded-full ${cfg.dot} flex items-center justify-center`}>
+          {status === 'done' && (
+            <svg className="w-2.5 h-2.5 text-white" viewBox="0 0 10 10" fill="none">
+              <path d="M2 5l2.5 2.5L8 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          )}
+          {status === 'in-progress' && (
+            <span className="w-1.5 h-0.5 bg-white rounded-full block" />
+          )}
+        </span>
+      </button>
+
+      {open && (
+        <div className="absolute left-0 top-7 z-20 bg-white border border-gray-200 rounded-lg shadow-lg py-1 w-36">
+          {STATUS_OPTIONS.map((opt) => (
+            <button
+              key={opt.value}
+              onClick={() => { onChange(opt.value); setOpen(false); }}
+              className={`w-full flex items-center gap-2 px-3 py-1.5 text-xs hover:bg-gray-50 transition-colors ${
+                opt.value === status ? 'font-semibold' : ''
+              }`}
+            >
+              <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${opt.dot}`} />
+              <span className={opt.text}>{opt.label}</span>
+              {opt.value === status && (
+                <svg className="w-3 h-3 text-gray-400 ml-auto" viewBox="0 0 10 10" fill="none">
+                  <path d="M2 5l2.5 2.5L8 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              )}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
 
 export function ItemRow({ item, onUpdate }: Props) {
@@ -23,25 +91,26 @@ export function ItemRow({ item, onUpdate }: Props) {
     if (notesDraft !== item.notes) onUpdate({ notes: notesDraft });
   }
 
+  const isDone = item.status === 'done';
+  const isInProgress = item.status === 'in-progress';
+
   return (
     <div
       className={`group flex items-start gap-3 px-4 py-3 border-b border-gray-100 last:border-0 transition-colors ${
-        item.done ? 'bg-green-50/40' : 'hover:bg-gray-50/60'
+        isDone ? 'bg-green-50/40' : isInProgress ? 'bg-amber-50/30' : 'hover:bg-gray-50/60'
       }`}
     >
-      {/* Checkbox */}
+      {/* Status button */}
       <div className="pt-0.5 shrink-0">
-        <input
-          type="checkbox"
-          checked={item.done}
-          onChange={(e) => onUpdate({ done: e.target.checked })}
-          className="w-4 h-4 rounded accent-blue-600 cursor-pointer"
+        <StatusButton
+          status={item.status}
+          onChange={(s) => onUpdate({ status: s, done: s === 'done' })}
         />
       </div>
 
       {/* Name */}
       <div className="flex-1 min-w-0">
-        <p className={`text-sm leading-snug ${item.done ? 'line-through text-gray-400' : 'text-gray-800'}`}>
+        <p className={`text-sm leading-snug ${isDone ? 'line-through text-gray-400' : isInProgress ? 'text-gray-700' : 'text-gray-800'}`}>
           {item.name}
         </p>
 

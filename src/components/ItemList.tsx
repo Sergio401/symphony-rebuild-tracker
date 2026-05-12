@@ -3,7 +3,7 @@ import { getEffectiveItem, computeModuleProgress } from '../hooks/useTracker';
 import type { Module, OverrideItem } from '../types';
 
 interface Filters {
-  status: 'all' | 'done' | 'pending';
+  status: 'all' | 'done' | 'pending' | 'in-progress';
   owner: string;
 }
 
@@ -26,8 +26,7 @@ export function ItemList({ modules, overrides, selectedModuleId, filters, onUpda
       items: mod.items
         .map((item) => getEffectiveItem(mod, item.id, overrides))
         .filter((item) => {
-          if (filters.status === 'done' && !item.done) return false;
-          if (filters.status === 'pending' && item.done) return false;
+          if (filters.status !== 'all' && item.status !== filters.status) return false;
           if (filters.owner && !item.owner.toLowerCase().includes(filters.owner.toLowerCase())) return false;
           return true;
         }),

@@ -1,5 +1,7 @@
 export type Complexity = 1 | 2 | 3 | 5 | 8;
 
+export type ItemStatus = 'pending' | 'in-progress' | 'done';
+
 export interface Item {
   id: string;
   name: string;
@@ -27,6 +29,7 @@ export interface ModulesData {
 }
 
 export interface OverrideItem {
+  status?: ItemStatus;
   done?: boolean;
   owner?: string;
   notes?: string;

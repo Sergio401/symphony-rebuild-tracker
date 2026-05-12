@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import type { Module, TrackerState, OverrideItem, SaveStatus, Complexity } from '../types';
+import type { Module, TrackerState, OverrideItem, SaveStatus, Complexity, ItemStatus } from '../types';
 import modulesData from '../data/modules.json';
 
 const LOCALSTORAGE_KEY = 'symphony_tracker_state';
@@ -32,13 +32,21 @@ async function persistState(state: TrackerState): Promise<void> {
 export function getEffectiveItem(module: Module, itemId: string, overrides: Record<string, OverrideItem>) {
   const base = module.items.find((i) => i.id === itemId)!;
   const override = overrides[itemId] ?? {};
+  const baseDone = override.done ?? base.done;
+  const status: ItemStatus = override.status ?? (baseDone ? 'done' : 'pending');
   return {
     ...base,
-    done: override.done ?? base.done,
+    status,
+    done: status === 'done',
     owner: override.owner ?? base.owner,
     notes: override.notes ?? base.notes,
     complexity: (override.complexity ?? base.complexity) as Complexity,
   };
+}
+
+function effectiveDone(override: OverrideItem, baseDone: boolean): boolean {
+  if (override.status != null) return override.status === 'done';
+  return override.done ?? baseDone;
 }
 
 export function computeProgress(modules: Module[], overrides: Record<string, OverrideItem>) {
@@ -48,9 +56,8 @@ export function computeProgress(modules: Module[], overrides: Record<string, Ove
     for (const item of mod.items) {
       const override = overrides[item.id] ?? {};
       const complexity = (override.complexity ?? item.complexity) as number;
-      const isDone = override.done ?? item.done;
       total += complexity;
-      if (isDone) done += complexity;
+      if (effectiveDone(override, item.done)) done += complexity;
     }
   }
   return total > 0 ? Math.round((done / total) * 100) : 0;
@@ -62,9 +69,8 @@ export function computeModuleProgress(mod: Module, overrides: Record<string, Ove
   for (const item of mod.items) {
     const override = overrides[item.id] ?? {};
     const complexity = (override.complexity ?? item.complexity) as number;
-    const isDone = override.done ?? item.done;
     total += complexity;
-    if (isDone) done += complexity;
+    if (effectiveDone(override, item.done)) done += complexity;
   }
   return total > 0 ? Math.round((done / total) * 100) : 0;
 }

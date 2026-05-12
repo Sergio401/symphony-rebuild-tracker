@@ -7,7 +7,7 @@ import { ItemList } from './components/ItemList';
 import { Dashboard } from './components/Dashboard';
 
 interface Filters {
-  status: 'all' | 'done' | 'pending';
+  status: 'all' | 'done' | 'pending' | 'in-progress';
   owner: string;
 }
 
@@ -28,8 +28,7 @@ export default function App() {
     return visibleModules.reduce((s, mod) => {
       return s + mod.items.filter((item) => {
         const effective = getEffectiveItem(mod, item.id, overrides);
-        if (filters.status === 'done' && !effective.done) return false;
-        if (filters.status === 'pending' && effective.done) return false;
+        if (filters.status !== 'all' && effective.status !== filters.status) return false;
         if (filters.owner && !effective.owner.toLowerCase().includes(filters.owner.toLowerCase())) return false;
         return true;
       }).length;

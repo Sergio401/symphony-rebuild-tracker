@@ -1,5 +1,5 @@
 interface Filters {
-  status: 'all' | 'done' | 'pending';
+  status: 'all' | 'done' | 'pending' | 'in-progress';
   owner: string;
 }
 
@@ -13,6 +13,7 @@ export function FilterBar({ filters, onFiltersChange, resultCount }: Props) {
   const statusOptions: { value: Filters['status']; label: string }[] = [
     { value: 'all', label: 'Todos' },
     { value: 'pending', label: 'Pendientes' },
+    { value: 'in-progress', label: 'En progreso' },
     { value: 'done', label: 'Completados' },
   ];
 
