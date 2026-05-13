@@ -294,13 +294,6 @@ export function ItemRow({ item, onUpdate, onUpdateName, onDelete }: Props) {
         </div>
       </div>
 
-      <div className="shrink-0 pt-0.5">
-        <ComplexityBadge
-          value={item.complexity as Complexity}
-          onChange={(v) => onUpdate({ complexity: v })}
-        />
-      </div>
-
       <div className="shrink-0 flex items-center gap-2 pt-0.5 min-w-[180px]">
         <LinkButton
           url={item.githubUrl}
@@ -341,6 +334,13 @@ export function ItemRow({ item, onUpdate, onUpdateName, onDelete }: Props) {
             {item.owner || '+ Asignar'}
           </button>
         )}
+      </div>
+
+      <div className="shrink-0 pt-0.5">
+        <ComplexityBadge
+          value={item.complexity as Complexity}
+          onChange={(v) => onUpdate({ complexity: v })}
+        />
       </div>
 
       {onDelete && (
