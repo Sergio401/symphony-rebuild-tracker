@@ -31,7 +31,7 @@ export function ItemList({ modules, selectedModuleId, filters, onUpdate, onUpdat
         return true;
       }),
     }))
-    .filter((mod) => mod.items.length > 0 || !filters.status && !filters.owner);
+    .filter((mod) => mod.items.length > 0 || (filters.status === 'all' && !filters.owner));
 
   if (filtered.length === 0) {
     return (
