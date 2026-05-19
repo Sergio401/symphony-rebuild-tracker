@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useFigmaLinks } from '../hooks/useFigmaLinks';
+import { ConfirmDialog } from './ConfirmDialog';
 import type { FigmaLink } from '../types';
 
 const CATEGORIES = [
@@ -186,6 +187,7 @@ export function FigmaLinks() {
   const [editingNameId, setEditingNameId] = useState<string | null>(null);
   const [nameDraft, setNameDraft] = useState('');
   const [filterModule, setFilterModule] = useState('');
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
 
   function handleAdd() {
     if (!newName.trim()) return;
@@ -367,7 +369,7 @@ export function FigmaLinks() {
                   {/* Delete */}
                   <td className="px-2 py-3">
                     <button
-                      onClick={() => deleteLink(link.id)}
+                      onClick={() => setPendingDeleteId(link.id)}
                       className="opacity-0 group-hover:opacity-100 transition-opacity text-gray-300 hover:text-red-400"
                       title="Eliminar"
                     >
@@ -382,6 +384,13 @@ export function FigmaLinks() {
           </table>
         </div>
       )}
+
+      <ConfirmDialog
+        open={pendingDeleteId !== null}
+        message={`¿Eliminar "${links.find(l => l.id === pendingDeleteId)?.name || 'este Figma'}"? Esta acción no se puede deshacer.`}
+        onConfirm={() => { if (pendingDeleteId) deleteLink(pendingDeleteId); setPendingDeleteId(null); }}
+        onCancel={() => setPendingDeleteId(null)}
+      />
     </main>
   );
 }

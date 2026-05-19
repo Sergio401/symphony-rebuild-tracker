@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, type ReactNode } from 'react';
+import { ConfirmDialog } from './ConfirmDialog';
 import { ComplexityBadge } from './ComplexityBadge';
 import type { Item, Complexity, ItemUpdate, ItemStatus } from '../types';
 
@@ -216,6 +217,7 @@ export function ItemRow({ item, onUpdate, onUpdateName, onDelete }: Props) {
   const [nameDraft, setNameDraft] = useState(item.name);
   const [ownerDraft, setOwnerDraft] = useState(item.owner);
   const [notesDraft, setNotesDraft] = useState(item.notes);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   function commitName() {
     const trimmed = nameDraft.trim();
@@ -345,7 +347,7 @@ export function ItemRow({ item, onUpdate, onUpdateName, onDelete }: Props) {
 
       {onDelete && (
         <button
-          onClick={onDelete}
+          onClick={() => setConfirmDelete(true)}
           title="Eliminar item"
           className="shrink-0 pt-0.5 opacity-0 group-hover:opacity-100 transition-opacity text-gray-300 hover:text-red-400"
         >
@@ -354,6 +356,12 @@ export function ItemRow({ item, onUpdate, onUpdateName, onDelete }: Props) {
           </svg>
         </button>
       )}
+      <ConfirmDialog
+        open={confirmDelete}
+        message={`¿Eliminar "${item.name || 'este item'}"? Esta acción no se puede deshacer.`}
+        onConfirm={() => { setConfirmDelete(false); onDelete?.(); }}
+        onCancel={() => setConfirmDelete(false)}
+      />
     </div>
   );
 }

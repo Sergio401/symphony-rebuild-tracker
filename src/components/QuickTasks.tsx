@@ -1,11 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 import { useQuickTasks } from '../hooks/useQuickTasks';
+import { ConfirmDialog } from './ConfirmDialog';
 
 export function QuickTasks() {
   const { tasks, loaded, addTask, toggleTask, deleteTask, updateText } = useQuickTasks();
   const [newText, setNewText] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editText, setEditText] = useState('');
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -119,7 +121,7 @@ export function QuickTasks() {
                   </span>
                 )}
                 <button
-                  onClick={() => deleteTask(task.id)}
+                  onClick={() => setPendingDeleteId(task.id)}
                   className="opacity-0 group-hover:opacity-100 transition-opacity text-gray-300 hover:text-red-400 shrink-0"
                   title="Eliminar"
                 >
@@ -152,7 +154,7 @@ export function QuickTasks() {
                 />
                 <span className="flex-1 text-sm text-gray-400 line-through">{task.text}</span>
                 <button
-                  onClick={() => deleteTask(task.id)}
+                  onClick={() => setPendingDeleteId(task.id)}
                   className="opacity-0 group-hover:opacity-100 transition-opacity text-gray-300 hover:text-red-400 shrink-0"
                   title="Eliminar"
                 >
@@ -165,6 +167,13 @@ export function QuickTasks() {
           </ul>
         </div>
       )}
+
+      <ConfirmDialog
+        open={pendingDeleteId !== null}
+        message={`¿Eliminar "${tasks.find(t => t.id === pendingDeleteId)?.text || 'esta tarea'}"? Esta acción no se puede deshacer.`}
+        onConfirm={() => { if (pendingDeleteId) deleteTask(pendingDeleteId); setPendingDeleteId(null); }}
+        onCancel={() => setPendingDeleteId(null)}
+      />
     </main>
   );
 }
