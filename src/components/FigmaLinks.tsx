@@ -114,8 +114,8 @@ function FigmaLinkButton({ url, onSave }: { url: string; onSave: (u: string) => 
           if (e.key === 'Enter') commit();
           if (e.key === 'Escape') { setEditing(false); setDraft(url); }
         }}
-        placeholder="https://figma.com/file/..."
-        className="w-56 text-xs border border-blue-300 rounded px-1.5 py-0.5 focus:outline-none focus:ring-1 focus:ring-blue-400"
+        placeholder="https://figma.com/..."
+        className="w-full text-xs border border-blue-300 rounded px-1.5 py-0.5 focus:outline-none focus:ring-1 focus:ring-blue-400"
       />
     );
   }
@@ -292,9 +292,9 @@ export function FigmaLinks() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-gray-100 bg-gray-50">
-                <th className="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">Nombre</th>
-                <th className="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase tracking-wider w-44">Módulo</th>
-                <th className="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase tracking-wider w-32">Link</th>
+                <th className="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase tracking-wider w-[45%]">Nombre</th>
+                <th className="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase tracking-wider w-[25%]">Módulo</th>
+                <th className="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase tracking-wider w-[20%]">Link</th>
                 <th className="w-8" />
               </tr>
             </thead>
