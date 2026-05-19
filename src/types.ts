@@ -36,3 +36,11 @@ export interface QuickTask {
   done: boolean;
   position: number;
 }
+
+export interface FigmaLink {
+  id: string;
+  name: string;
+  module: string;
+  url: string;
+  position: number;
+}

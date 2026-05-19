@@ -6,6 +6,7 @@ import { FilterBar } from './components/FilterBar';
 import { ItemList } from './components/ItemList';
 import { Dashboard } from './components/Dashboard';
 import { QuickTasks } from './components/QuickTasks';
+import { FigmaLinks } from './components/FigmaLinks';
 
 interface Filters {
   status: 'all' | 'done' | 'pending' | 'in-progress';
@@ -38,6 +39,7 @@ export default function App() {
   const pageTitle = useMemo(() => {
     if (activeView === 'dashboard') return 'Dashboard';
     if (activeView === 'quick-tasks') return 'Mini tareas';
+    if (activeView === 'figma-links') return 'Figmas';
     if (selectedModuleId) {
       const mod = modules.find((m) => m.id === selectedModuleId);
       return mod ? `${mod.category} — ${mod.name}` : 'Módulo';
@@ -80,6 +82,8 @@ export default function App() {
           <Dashboard modules={modules} />
         ) : activeView === 'quick-tasks' ? (
           <QuickTasks />
+        ) : activeView === 'figma-links' ? (
+          <FigmaLinks />
         ) : (
           <>
             <FilterBar filters={filters} onFiltersChange={setFilters} resultCount={resultCount} />
