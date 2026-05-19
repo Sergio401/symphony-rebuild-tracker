@@ -3,6 +3,7 @@ import { useFigmaLinks } from '../hooks/useFigmaLinks';
 import type { FigmaLink } from '../types';
 
 const CATEGORIES = [
+  'Design System',
   'Inventory',
   'Workforce',
   'Assurance',
@@ -14,6 +15,7 @@ const CATEGORIES = [
 ];
 
 const CATEGORY_COLORS: Record<string, string> = {
+  'Design System': 'bg-violet-100 text-violet-700',
   Inventory: 'bg-blue-100 text-blue-700',
   Workforce: 'bg-orange-100 text-orange-700',
   Assurance: 'bg-green-100 text-green-700',
