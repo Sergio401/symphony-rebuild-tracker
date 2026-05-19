@@ -7,6 +7,7 @@ import { ItemList } from './components/ItemList';
 import { Dashboard } from './components/Dashboard';
 import { QuickTasks } from './components/QuickTasks';
 import { FigmaLinks } from './components/FigmaLinks';
+import { DesignSystemLinks } from './components/DesignSystemLinks';
 
 interface Filters {
   status: 'all' | 'done' | 'pending' | 'in-progress';
@@ -40,6 +41,7 @@ export default function App() {
     if (activeView === 'dashboard') return 'Dashboard';
     if (activeView === 'quick-tasks') return 'Mini tareas';
     if (activeView === 'figma-links') return 'Figmas';
+    if (activeView === 'design-system') return 'Design System';
     if (selectedModuleId) {
       const mod = modules.find((m) => m.id === selectedModuleId);
       return mod ? `${mod.category} — ${mod.name}` : 'Módulo';
@@ -84,6 +86,8 @@ export default function App() {
           <QuickTasks />
         ) : activeView === 'figma-links' ? (
           <FigmaLinks />
+        ) : activeView === 'design-system' ? (
+          <DesignSystemLinks />
         ) : (
           <>
             <FilterBar filters={filters} onFiltersChange={setFilters} resultCount={resultCount} />

@@ -27,6 +27,13 @@ export const quickTasks = pgTable('quick_tasks', {
   position: integer('position').notNull().default(0),
 });
 
+export const designSystemLinks = pgTable('design_system_links', {
+  id: text('id').primaryKey(),
+  name: text('name').notNull().default(''),
+  url: text('url').notNull().default(''),
+  position: integer('position').notNull().default(0),
+});
+
 export const figmaLinks = pgTable('figma_links', {
   id: text('id').primaryKey(),
   name: text('name').notNull().default(''),

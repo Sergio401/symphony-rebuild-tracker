@@ -37,6 +37,13 @@ export interface QuickTask {
   position: number;
 }
 
+export interface DesignSystemLink {
+  id: string;
+  name: string;
+  url: string;
+  position: number;
+}
+
 export interface FigmaLink {
   id: string;
   name: string;
