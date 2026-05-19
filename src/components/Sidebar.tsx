@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { computeModuleProgress } from '../hooks/useTracker';
 import type { Module } from '../types';
 
-export type ActiveView = 'tracker' | 'dashboard';
+export type ActiveView = 'tracker' | 'dashboard' | 'quick-tasks';
 
 const CATEGORY_ORDER = ['Inventory', 'Workforce', 'Assurance', 'Reports', 'Admin', 'Automation', 'Fulfillment', 'Cross-cutting'];
 
@@ -102,6 +102,16 @@ export function Sidebar({ modules, selectedModuleId, selectedCategory, activeVie
         >
           <span>📈</span>
           <span>Dashboard</span>
+        </button>
+
+        <button
+          onClick={() => onViewChange('quick-tasks')}
+          className={`w-full text-left px-4 py-2 flex items-center gap-2 text-xs font-semibold mb-1 transition-colors rounded-lg mx-0 ${
+            activeView === 'quick-tasks' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800'
+          }`}
+        >
+          <span>📝</span>
+          <span>Mini tareas</span>
         </button>
 
         <button
