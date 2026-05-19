@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { useFigmaLinks } from '../hooks/useFigmaLinks';
 import type { FigmaLink } from '../types';
 
@@ -28,12 +29,57 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 function ModuleChip({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   const [open, setOpen] = useState(false);
+  const [dropPos, setDropPos] = useState({ top: 0, left: 0, openUp: false });
+  const btnRef = useRef<HTMLButtonElement>(null);
   const color = value ? CATEGORY_COLORS[value] ?? 'bg-gray-100 text-gray-600' : '';
 
+  function handleOpen() {
+    if (btnRef.current) {
+      const rect = btnRef.current.getBoundingClientRect();
+      const dropdownHeight = 280;
+      const openUp = rect.bottom + dropdownHeight > window.innerHeight;
+      setDropPos({
+        top: openUp ? rect.top - dropdownHeight - 4 : rect.bottom + 4,
+        left: rect.left,
+        openUp,
+      });
+    }
+    setOpen((o) => !o);
+  }
+
+  const dropdown = open ? (
+    <>
+      <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
+      <div
+        className="fixed z-50 bg-white border border-gray-200 rounded-lg shadow-lg py-1 min-w-[150px]"
+        style={{ top: dropPos.top, left: dropPos.left }}
+      >
+        <button
+          onClick={() => { onChange(''); setOpen(false); }}
+          className="w-full text-left px-3 py-1.5 text-xs text-gray-400 hover:bg-gray-50"
+        >
+          Sin módulo
+        </button>
+        {CATEGORIES.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => { onChange(cat); setOpen(false); }}
+            className="w-full text-left px-3 py-1.5 text-xs hover:bg-gray-50 flex items-center gap-2"
+          >
+            <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${CATEGORY_COLORS[cat]}`}>
+              {cat}
+            </span>
+          </button>
+        ))}
+      </div>
+    </>
+  ) : null;
+
   return (
-    <div className="relative">
+    <>
       <button
-        onClick={() => setOpen((o) => !o)}
+        ref={btnRef}
+        onClick={handleOpen}
         className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium transition-colors ${
           value ? color : 'bg-gray-100 text-gray-400 hover:bg-gray-200'
         }`}
@@ -43,32 +89,8 @@ function ModuleChip({ value, onChange }: { value: string; onChange: (v: string) 
           <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       </button>
-
-      {open && (
-        <>
-          <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-          <div className="absolute left-0 top-full mt-1 z-20 bg-white border border-gray-200 rounded-lg shadow-lg py-1 min-w-[150px]">
-            <button
-              onClick={() => { onChange(''); setOpen(false); }}
-              className="w-full text-left px-3 py-1.5 text-xs text-gray-400 hover:bg-gray-50"
-            >
-              Sin módulo
-            </button>
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => { onChange(cat); setOpen(false); }}
-                className="w-full text-left px-3 py-1.5 text-xs hover:bg-gray-50 flex items-center gap-2"
-              >
-                <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${CATEGORY_COLORS[cat]}`}>
-                  {cat}
-                </span>
-              </button>
-            ))}
-          </div>
-        </>
-      )}
-    </div>
+      {createPortal(dropdown, document.body)}
+    </>
   );
 }
 
