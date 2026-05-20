@@ -1,8 +1,9 @@
 import type { CXPrinciple, CXItem } from '../types';
 
-const STATUS_COLORS = {
-  'atendido': '#22c55e',
-  'parcial': '#f59e0b',
+const STATUS_COLORS: Record<string, string> = {
+  'atendido':    '#22c55e',
+  'parcial':     '#f59e0b',
+  'se-atendera': '#60a5fa',
   'no-atendido': '#ef4444',
   'sin-evaluar': '#d1d5db',
 };

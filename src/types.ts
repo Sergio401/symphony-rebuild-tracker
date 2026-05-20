@@ -45,7 +45,7 @@ export interface FigmaLink {
   position: number;
 }
 
-export type CXItemStatus = 'sin-evaluar' | 'atendido' | 'parcial' | 'no-atendido';
+export type CXItemStatus = 'sin-evaluar' | 'atendido' | 'parcial' | 'se-atendera' | 'no-atendido';
 export type CXItemType = 'bug' | 'feature' | 'mejora' | 'traduccion' | 'documentacion' | 'cancelado';
 export type CXPriority = 'alta' | 'media' | 'baja' | '';
 

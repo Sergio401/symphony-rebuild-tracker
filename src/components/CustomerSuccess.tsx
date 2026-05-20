@@ -31,6 +31,7 @@ export function CustomerSuccess() {
   const activeItems = items.filter((i) => i.type !== 'cancelado');
   const atendidos = activeItems.filter((i) => i.status === 'atendido').length;
   const parciales = activeItems.filter((i) => i.status === 'parcial').length;
+  const seAtendera = activeItems.filter((i) => i.status === 'se-atendera').length;
   const sinEvaluar = activeItems.filter((i) => i.status === 'sin-evaluar').length;
 
   const tabs: { id: CXTab; label: string; count?: number }[] = [
@@ -50,6 +51,10 @@ export function CustomerSuccess() {
         <div className="flex items-center gap-1.5">
           <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
           <span className="text-xs text-gray-600">{parciales} parciales</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <span className="w-2.5 h-2.5 rounded-full bg-blue-400" />
+          <span className="text-xs text-gray-600">{seAtendera} se atenderá</span>
         </div>
         <div className="flex items-center gap-1.5">
           <span className="w-2.5 h-2.5 rounded-full bg-gray-300" />

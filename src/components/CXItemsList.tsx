@@ -1,12 +1,6 @@
 import { useState, useMemo } from 'react';
 import type { CXItem, CXItemStatus, CXPrinciple } from '../types';
-
-const STATUS_CONFIG: Record<CXItemStatus, { label: string; color: string; bg: string }> = {
-  'atendido':    { label: 'Atendido',    color: 'text-green-700',  bg: 'bg-green-50 border-green-200' },
-  'parcial':     { label: 'Parcial',     color: 'text-amber-700',  bg: 'bg-amber-50 border-amber-200' },
-  'no-atendido': { label: 'No atendido', color: 'text-red-700',    bg: 'bg-red-50 border-red-200' },
-  'sin-evaluar': { label: 'Sin evaluar', color: 'text-gray-500',   bg: 'bg-gray-50 border-gray-200' },
-};
+import { CXStatusBadge, CX_STATUS_OPTIONS } from './CXStatusBadge';
 
 const TYPE_CONFIG: Record<string, { label: string; color: string }> = {
   bug:          { label: 'Bug',          color: 'text-red-600 bg-red-50 border-red-200' },
@@ -86,7 +80,7 @@ export function CXItemsList({
         i.type,
         i.priority || '-',
         `"${i.description.replace(/"/g, '""')}"`,
-        STATUS_CONFIG[i.status]?.label ?? i.status,
+        CX_STATUS_OPTIONS.find((o) => o.value === i.status)?.label ?? i.status,
       ]),
     ];
     const csv = rows.map((r) => r.join(',')).join('\n');
@@ -159,7 +153,7 @@ export function CXItemsList({
           className="px-2 py-1.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-400 bg-white"
         >
           <option value="">Todos los estados</option>
-          {Object.entries(STATUS_CONFIG).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
+          {CX_STATUS_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
         <label className="flex items-center gap-1.5 text-xs text-gray-500 cursor-pointer">
           <input
@@ -252,7 +246,6 @@ export function CXItemsList({
           </div>
         ) : (
           filtered.map((item) => {
-            const statusCfg = STATUS_CONFIG[item.status];
             const typeCfg = TYPE_CONFIG[item.type] ?? TYPE_CONFIG.mejora;
             const isCancelled = item.type === 'cancelado';
 
@@ -291,21 +284,11 @@ export function CXItemsList({
                 </span>
 
                 {/* Selector de estado */}
-                {!isCancelled ? (
-                  <div className="shrink-0">
-                    <select
-                      value={item.status}
-                      onChange={(e) => onUpdateStatus(item.id, e.target.value as CXItemStatus)}
-                      className={`text-xs px-2 py-1 rounded-lg border font-medium cursor-pointer focus:outline-none ${statusCfg.bg} ${statusCfg.color}`}
-                    >
-                      {Object.entries(STATUS_CONFIG).map(([k, v]) => (
-                        <option key={k} value={k}>{v.label}</option>
-                      ))}
-                    </select>
-                  </div>
-                ) : (
-                  <span className="shrink-0 text-xs text-gray-400 italic">Cancelado</span>
-                )}
+                <CXStatusBadge
+                  status={item.status}
+                  onChange={(s) => onUpdateStatus(item.id, s)}
+                  disabled={isCancelled}
+                />
 
                 {/* Eliminar */}
                 <button

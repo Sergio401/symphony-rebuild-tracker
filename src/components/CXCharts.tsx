@@ -3,15 +3,17 @@ import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, Resp
 import type { CXItem } from '../types';
 
 const STATUS_COLORS: Record<string, string> = {
-  'atendido': '#22c55e',
-  'parcial': '#f59e0b',
+  'atendido':    '#22c55e',
+  'parcial':     '#f59e0b',
+  'se-atendera': '#60a5fa',
   'no-atendido': '#ef4444',
   'sin-evaluar': '#d1d5db',
 };
 
 const STATUS_LABELS: Record<string, string> = {
-  'atendido': 'Atendido',
-  'parcial': 'Parcial',
+  'atendido':    'Atendido',
+  'parcial':     'Parcial',
+  'se-atendera': 'Se atenderá',
   'no-atendido': 'No atendido',
   'sin-evaluar': 'Sin evaluar',
 };
@@ -65,6 +67,7 @@ export function CXCharts({ items }: Props) {
       name: MODULES_SHORT[mod] ?? mod,
       Atendido: counts['atendido'] ?? 0,
       Parcial: counts['parcial'] ?? 0,
+      'Se atenderá': counts['se-atendera'] ?? 0,
       'No atendido': counts['no-atendido'] ?? 0,
       'Sin evaluar': counts['sin-evaluar'] ?? 0,
     };
@@ -183,6 +186,7 @@ export function CXCharts({ items }: Props) {
             <Legend wrapperStyle={{ fontSize: 12 }} />
             <Bar dataKey="Atendido" stackId="a" fill="#22c55e" />
             <Bar dataKey="Parcial" stackId="a" fill="#f59e0b" />
+            <Bar dataKey="Se atenderá" stackId="a" fill="#60a5fa" />
             <Bar dataKey="No atendido" stackId="a" fill="#ef4444" />
             <Bar dataKey="Sin evaluar" stackId="a" fill="#d1d5db" />
           </BarChart>
