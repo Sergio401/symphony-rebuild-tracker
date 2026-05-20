@@ -41,7 +41,7 @@ export function ComplexityBadge({ value, onChange }: Props) {
       {open && (
         <>
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-          <div className="absolute left-0 top-full mt-1 z-20 bg-white border border-gray-200 rounded-lg shadow-lg p-1 min-w-[140px]">
+          <div className="absolute right-0 top-full mt-1 z-20 bg-white border border-gray-200 rounded-lg shadow-lg p-1 min-w-[140px]">
             {OPTIONS.map((opt) => (
               <button
                 key={opt}
