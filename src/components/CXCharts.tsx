@@ -18,10 +18,10 @@ const STATUS_LABELS: Record<string, string> = {
 
 const MODULES_SHORT: Record<string, string> = {
   'KPI View & Navigator': 'KPI View',
-  'Relatório': 'Relatório',
-  'Alarmes': 'Alarmes',
+  'Reporte': 'Reporte',
+  'Alarmas': 'Alarmas',
   'Catálogo & Métricas': 'Catálogo',
-  'Inventário & NE Grouping': 'Inventário',
+  'Inventario & NE Grouping': 'Inventario',
   'SNMP & Poller': 'SNMP',
   'Superset': 'Superset',
   'Transversal': 'Transversal',

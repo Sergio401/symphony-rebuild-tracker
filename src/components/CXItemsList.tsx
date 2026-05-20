@@ -36,10 +36,10 @@ interface Props {
 
 const MODULES = [
   'KPI View & Navigator',
-  'Relatório',
-  'Alarmes',
+  'Reporte',
+  'Alarmas',
   'Catálogo & Métricas',
-  'Inventário & NE Grouping',
+  'Inventario & NE Grouping',
   'SNMP & Poller',
   'Superset',
   'Transversal',
