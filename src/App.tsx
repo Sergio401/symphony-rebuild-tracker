@@ -7,6 +7,7 @@ import { ItemList } from './components/ItemList';
 import { Dashboard } from './components/Dashboard';
 import { QuickTasks } from './components/QuickTasks';
 import { FigmaLinks } from './components/FigmaLinks';
+import { CustomerSuccess } from './components/CustomerSuccess';
 
 interface Filters {
   status: 'all' | 'done' | 'pending' | 'in-progress';
@@ -40,6 +41,7 @@ export default function App() {
     if (activeView === 'dashboard') return 'Dashboard';
     if (activeView === 'quick-tasks') return 'Mini tareas';
     if (activeView === 'figma-links') return 'Figmas';
+    if (activeView === 'customer-success') return 'Customer Success';
     if (selectedModuleId) {
       const mod = modules.find((m) => m.id === selectedModuleId);
       return mod ? `${mod.category} — ${mod.name}` : 'Módulo';
@@ -78,7 +80,9 @@ export default function App() {
           <h2 className="text-base font-semibold text-gray-800">{pageTitle}</h2>
         </div>
 
-        {activeView === 'dashboard' ? (
+        {activeView === 'customer-success' ? (
+          <CustomerSuccess />
+        ) : activeView === 'dashboard' ? (
           <Dashboard modules={modules} />
         ) : activeView === 'quick-tasks' ? (
           <QuickTasks />

@@ -44,3 +44,27 @@ export interface FigmaLink {
   url: string;
   position: number;
 }
+
+export type CXItemStatus = 'sin-evaluar' | 'atendido' | 'parcial' | 'no-atendido';
+export type CXItemType = 'bug' | 'feature' | 'mejora' | 'traduccion' | 'documentacion' | 'cancelado';
+export type CXPriority = 'alta' | 'media' | 'baja' | '';
+
+export interface CXItem {
+  id: string;
+  module: string;
+  type: CXItemType;
+  priority: CXPriority;
+  description: string;
+  status: CXItemStatus;
+  position: number;
+}
+
+export interface CXPrinciple {
+  id: string;
+  section: number;
+  sectionTitle: string;
+  title: string;
+  description: string;
+  referenceIds: string[];
+  position: number;
+}

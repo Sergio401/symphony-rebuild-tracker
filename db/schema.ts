@@ -41,3 +41,23 @@ export const figmaLinks = pgTable('figma_links', {
   url: text('url').notNull().default(''),
   position: integer('position').notNull().default(0),
 });
+
+export const cxItems = pgTable('cx_items', {
+  id: text('id').primaryKey(),
+  module: text('module').notNull().default(''),
+  type: text('type').notNull().default('mejora'),
+  priority: text('priority').notNull().default(''),
+  description: text('description').notNull().default(''),
+  status: text('status').notNull().default('sin-evaluar'),
+  position: integer('position').notNull().default(0),
+});
+
+export const cxPrinciples = pgTable('cx_principles', {
+  id: text('id').primaryKey(),
+  section: integer('section').notNull().default(0),
+  sectionTitle: text('section_title').notNull().default(''),
+  title: text('title').notNull().default(''),
+  description: text('description').notNull().default(''),
+  referenceIds: text('reference_ids').notNull().default('[]'),
+  position: integer('position').notNull().default(0),
+});
