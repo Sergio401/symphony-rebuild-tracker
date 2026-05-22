@@ -52,8 +52,9 @@ export function CXCharts({ items }: Props) {
 
   const atendidos = globalCounts['atendido'] ?? 0;
   const parciales = globalCounts['parcial'] ?? 0;
+  const seAtenderan = globalCounts['se-atendera'] ?? 0;
   const total = activeItems.length;
-  const coveragePct = total > 0 ? Math.round(((atendidos + parciales * 0.5) / total) * 100) : 0;
+  const coveragePct = total > 0 ? Math.round(((atendidos + seAtenderan + parciales * 0.5) / total) * 100) : 0;
 
   const moduleNames = Object.keys(MODULES_SHORT).filter((m) =>
     activeItems.some((i) => i.module === m)

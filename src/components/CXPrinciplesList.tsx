@@ -15,12 +15,13 @@ interface Props {
 }
 
 function computePrincipleCoverage(principle: CXPrinciple, items: CXItem[]) {
-  const related = items.filter((i) => principle.referenceIds.includes(i.id));
-  if (related.length === 0) return { pct: 0, atendido: 0, parcial: 0, total: 0 };
+  const related = items.filter((i) => principle.referenceIds.includes(i.id) && i.type !== 'cancelado');
+  if (related.length === 0) return { pct: 0, atendido: 0, parcial: 0, seAtendera: 0, total: 0 };
   const atendido = related.filter((i) => i.status === 'atendido').length;
   const parcial = related.filter((i) => i.status === 'parcial').length;
-  const pct = Math.round(((atendido + parcial * 0.5) / related.length) * 100);
-  return { pct, atendido, parcial, total: related.length };
+  const seAtendera = related.filter((i) => i.status === 'se-atendera').length;
+  const pct = Math.round(((atendido + seAtendera + parcial * 0.5) / related.length) * 100);
+  return { pct, atendido, parcial, seAtendera, total: related.length };
 }
 
 const SECTION_ICONS: Record<number, string> = {
@@ -56,7 +57,7 @@ export function CXPrinciplesList({ principles, items, onSelectPrinciple }: Props
 
             <div className="space-y-2">
               {sectionPrinciples.map((principle) => {
-                const { pct, atendido, parcial, total } = computePrincipleCoverage(principle, items);
+                const { pct, atendido, parcial, seAtendera, total } = computePrincipleCoverage(principle, items);
                 const coverageColor = pct === 100 ? '#22c55e' : pct >= 50 ? '#f59e0b' : pct > 0 ? '#ef4444' : '#d1d5db';
 
                 return (
@@ -91,7 +92,7 @@ export function CXPrinciplesList({ principles, items, onSelectPrinciple }: Props
                             />
                           </div>
                           <span className="text-xs text-gray-500 shrink-0">
-                            {atendido + parcial}/{total} ítems
+                            {atendido + seAtendera + parcial}/{total} ítems
                           </span>
                           <span className="text-xs text-blue-500 shrink-0 group-hover:underline">
                             Ver →
