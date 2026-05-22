@@ -140,10 +140,12 @@ export function CXCharts({ items }: Props) {
           <p className="text-sm font-medium text-gray-700 mb-4">Por tipo</p>
           {(['bug', 'feature', 'mejora', 'traduccion', 'documentacion'] as const).map((type) => {
             const typeItems = activeItems.filter((i) => i.type === type);
+            const total = typeItems.length;
             const typeAtendidos = typeItems.filter((i) => i.status === 'atendido').length;
+            const typeSeAtendera = typeItems.filter((i) => i.status === 'se-atendera').length;
             const typeParcial = typeItems.filter((i) => i.status === 'parcial').length;
-            const typePct = typeItems.length > 0
-              ? Math.round(((typeAtendidos + typeParcial * 0.5) / typeItems.length) * 100)
+            const typePct = total > 0
+              ? Math.round(((typeAtendidos + typeSeAtendera + typeParcial * 0.5) / total) * 100)
               : 0;
             const typeLabels: Record<string, string> = {
               bug: 'Bugs',
@@ -157,18 +159,18 @@ export function CXCharts({ items }: Props) {
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs text-gray-600">{typeLabels[type]}</span>
                   <span className="text-xs font-semibold text-gray-700">
-                    {typeAtendidos + typeParcial}/{typeItems.length}
+                    {typeAtendidos + typeSeAtendera + typeParcial}/{total}
                     <span className="text-gray-400 font-normal ml-1">({typePct}%)</span>
                   </span>
                 </div>
-                <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div
-                    className="h-full rounded-full transition-all"
-                    style={{
-                      width: `${typePct}%`,
-                      backgroundColor: typePct === 100 ? '#22c55e' : typePct > 50 ? '#f59e0b' : '#ef4444',
-                    }}
-                  />
+                <div className="h-2 bg-gray-100 rounded-full overflow-hidden flex">
+                  {total > 0 && (
+                    <>
+                      <div className="h-full transition-all" style={{ width: `${(typeAtendidos / total) * 100}%`, backgroundColor: '#22c55e' }} />
+                      <div className="h-full transition-all" style={{ width: `${(typeSeAtendera / total) * 100}%`, backgroundColor: '#60a5fa' }} />
+                      <div className="h-full transition-all" style={{ width: `${(typeParcial * 0.5 / total) * 100}%`, backgroundColor: '#f59e0b' }} />
+                    </>
+                  )}
                 </div>
               </div>
             );
