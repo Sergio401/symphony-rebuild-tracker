@@ -23,6 +23,7 @@ interface Props {
 
 export function CXStatusBadge({ status, onChange, disabled }: Props) {
   const [open, setOpen] = useState(false);
+  const [opensUp, setOpensUp] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const cfg = CX_STATUS_OPTIONS.find((o) => o.value === status) ?? CX_STATUS_OPTIONS[0];
 
@@ -35,6 +36,15 @@ export function CXStatusBadge({ status, onChange, disabled }: Props) {
     return () => document.removeEventListener('mousedown', onDown);
   }, [open]);
 
+  function handleToggle() {
+    if (!open && ref.current) {
+      const rect = ref.current.getBoundingClientRect();
+      // dropdown is ~160px tall (5 options × ~32px)
+      setOpensUp(rect.bottom + 160 > window.innerHeight);
+    }
+    setOpen((v) => !v);
+  }
+
   if (disabled) {
     return (
       <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs text-gray-400 italic">
@@ -46,7 +56,7 @@ export function CXStatusBadge({ status, onChange, disabled }: Props) {
   return (
     <div ref={ref} className="relative shrink-0">
       <button
-        onClick={() => setOpen((v) => !v)}
+        onClick={handleToggle}
         className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium border transition-colors ${cfg.bg} ${cfg.text} border-transparent hover:border-gray-200`}
       >
         <span className={`w-2 h-2 rounded-full shrink-0 ${cfg.dot}`} />
@@ -59,7 +69,7 @@ export function CXStatusBadge({ status, onChange, disabled }: Props) {
       {open && (
         <>
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-          <div className="absolute right-0 top-full mt-1 z-20 bg-white border border-gray-200 rounded-xl shadow-lg py-1 w-40">
+          <div className={`absolute right-0 z-20 bg-white border border-gray-200 rounded-xl shadow-lg py-1 w-40 ${opensUp ? 'bottom-full mb-1' : 'top-full mt-1'}`}>
             {CX_STATUS_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
