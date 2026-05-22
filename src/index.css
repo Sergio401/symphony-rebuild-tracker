@@ -11,3 +11,35 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
+
+@media print {
+  /* Hide everything, then reveal only the charts area */
+  body * { visibility: hidden; }
+  .cx-print-area,
+  .cx-print-area * { visibility: visible; }
+
+  /* Position the charts area to fill the page */
+  .cx-print-area {
+    position: fixed;
+    inset: 0;
+    padding: 24px;
+    background: white;
+    overflow: visible;
+  }
+
+  /* Let the grid stack vertically for print */
+  .cx-print-area .lg\:grid-cols-2 {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Give Recharts containers explicit dimensions so SVGs render */
+  .cx-print-area .recharts-responsive-container {
+    width: 100% !important;
+    min-height: 220px !important;
+  }
+
+  /* Avoid page breaks inside chart cards */
+  .cx-print-area > div > div {
+    break-inside: avoid;
+  }
+}

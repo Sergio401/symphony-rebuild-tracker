@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import type { CXItem } from '../types';
 
@@ -36,6 +36,16 @@ interface Props {
 
 export function CXCharts({ items }: Props) {
   const chartsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function onBeforePrint() {
+      // Force Recharts to recalculate dimensions before the browser paints for print
+      window.dispatchEvent(new Event('resize'));
+      setTimeout(() => window.dispatchEvent(new Event('resize')), 100);
+    }
+    window.addEventListener('beforeprint', onBeforePrint);
+    return () => window.removeEventListener('beforeprint', onBeforePrint);
+  }, []);
 
   const activeItems = items.filter((i) => i.type !== 'cancelado');
 
@@ -75,7 +85,7 @@ export function CXCharts({ items }: Props) {
   });
 
   return (
-    <div ref={chartsRef} className="space-y-8">
+    <div ref={chartsRef} className="space-y-8 cx-print-area">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-gray-700">Cobertura general</h3>
         <button
