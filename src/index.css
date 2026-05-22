@@ -18,13 +18,20 @@ body {
   .cx-print-area,
   .cx-print-area * { visibility: visible; }
 
-  /* Position the charts area to fill the page */
+  /* Allow multi-page flow */
+  html, body, #root {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Position charts area to fill the paper width and flow freely */
   .cx-print-area {
-    position: fixed;
-    inset: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
     padding: 24px;
     background: white;
-    overflow: visible;
   }
 
   /* Let the grid stack vertically for print */
