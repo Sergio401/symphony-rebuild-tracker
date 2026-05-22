@@ -85,11 +85,14 @@ export function CXPrinciplesList({ principles, items, onSelectPrinciple }: Props
                         </p>
 
                         <div className="flex items-center gap-3 mt-2">
-                          <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                            <div
-                              className="h-full rounded-full transition-all"
-                              style={{ width: `${pct}%`, backgroundColor: coverageColor }}
-                            />
+                          <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden flex">
+                            {total > 0 && (
+                              <>
+                                <div className="h-full transition-all" style={{ width: `${(atendido / total) * 100}%`, backgroundColor: '#22c55e' }} />
+                                <div className="h-full transition-all" style={{ width: `${(seAtendera / total) * 100}%`, backgroundColor: '#60a5fa' }} />
+                                <div className="h-full transition-all" style={{ width: `${(parcial * 0.5 / total) * 100}%`, backgroundColor: '#f59e0b' }} />
+                              </>
+                            )}
                           </div>
                           <span className="text-xs text-gray-500 shrink-0">
                             {atendido + seAtendera + parcial}/{total} ítems
