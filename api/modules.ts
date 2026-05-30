@@ -2,7 +2,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import postgres from 'postgres';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import { pgTable, text, integer } from 'drizzle-orm/pg-core';
-import { asc, eq } from 'drizzle-orm';
+import { asc, eq, max } from 'drizzle-orm';
 
 const modulesTable = pgTable('modules', {
   id: text('id').primaryKey(),
@@ -58,6 +58,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }));
 
       return res.json({ modules });
+    }
+
+    if (req.method === 'POST') {
+      const body = req.body as { id: string; name: string; category: string; position?: number };
+      if (!body.id || !body.name || !body.category) {
+        return res.status(400).json({ error: 'id, name and category are required' });
+      }
+      const [{ maxPos }] = await db
+        .select({ maxPos: max(modulesTable.position) })
+        .from(modulesTable);
+      await db.insert(modulesTable).values({
+        id: body.id,
+        name: body.name,
+        category: body.category,
+        position: body.position ?? (maxPos ?? -1) + 1,
+      });
+      return res.status(201).json({ id: body.id });
     }
 
     res.status(405).json({ error: 'Method not allowed' });
