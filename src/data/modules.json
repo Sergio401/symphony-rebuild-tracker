@@ -1154,6 +1154,29 @@
       ]
     },
     {
+      "id": "adm-servers",
+      "name": "Servers",
+      "category": "Admin",
+      "items": [
+        {
+          "id": "adm-srv-list",
+          "name": "Catálogo",
+          "complexity": 2,
+          "done": false,
+          "owner": "",
+          "notes": "No existe en app_new"
+        },
+        {
+          "id": "adm-srv-crud",
+          "name": "Formulario crear / editar + configuración de conexión",
+          "complexity": 3,
+          "done": false,
+          "owner": "",
+          "notes": "No existe en app_new"
+        }
+      ]
+    },
+    {
       "id": "adm-notifgroups",
       "name": "Notification Groups",
       "category": "Admin",
